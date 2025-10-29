@@ -1,0 +1,2919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Host a Move / Bust a Move - Wireframes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .screen {
+            display: none;
+            min-height: 700px;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        .toggle {
+            background: rgba(255,255,255,0.2);
+            border-radius: 25px;
+            padding: 4px;
+            display: flex;
+            gap: 3px;
+        }
+        
+        .toggle-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: none;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .toggle-btn.active {
+            background: white;
+            color: #667eea;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .event-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .event-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .event-card h3 {
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .event-card p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        .badge-host {
+            background: #ffeaa7;
+            color: #d63031;
+        }
+        
+        .badge-comm {
+            background: #74b9ff;
+            color: #0984e3;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .input-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: #667eea;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 10px 0;
+            margin-bottom: 15px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section h3 {
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+        
+        .host-list {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .host-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .host-item:last-child {
+            border-bottom: none;
+        }
+        
+        .potluck-item {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .potluck-item.claimed {
+            border-color: #00b894;
+            background: #f0fdf4;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .rsvp-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 15px;
+        }
+        
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            border-radius: 8px;
+        }
+        
+        .calendar-day.has-event {
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .detail-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .detail-value {
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: start;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-text {
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .activity-time {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .nav-bottom {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 15px 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .fab {
+            position: fixed;
+            bottom: 80px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        /* Toggle Switch Styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Screen 1: Home Dashboard -->
+        <div class="screen active" id="home">
+            <div class="header">
+                <h1>Host a Move</h1>
+                <p style="opacity: 0.9; font-size: 14px;">Plan unforgettable gatherings</p>
+                <div class="toggle-container">
+                    <div class="toggle">
+                        <button class="toggle-btn active" onclick="switchMode('host')">Hosting</button>
+                        <button class="toggle-btn" onclick="switchMode('attend')">Attending</button>
+                        <button class="toggle-btn" onclick="switchMode('past')">Past Events</button>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <h2 style="margin-bottom: 15px;">Your Events</h2>
+                <div class="event-card" onclick="showScreen('event-details')">
+                    <h3>Sarah's Graduation Party</h3>
+                    <p>📅 December 15, 2025 • 4:00 PM</p>
+                    <p>📍 123 Main St, Apartment 4B</p>
+                    <span class="badge badge-host">Primary Host</span>
+                </div>
+                <div class="event-card" onclick="showScreen('event-details-cohost')">
+                    <h3>Holiday Potluck</h3>
+                    <p>📅 December 23, 2025 • 6:00 PM</p>
+                    <p>📍 Maria's House</p>
+                    <span class="badge badge-host">Co-Host</span>
+                </div>
+                <button class="btn btn-primary" onclick="showScreen('create-event')" style="margin-top: 20px;">+ Create New Event</button>
+            </div>
+        </div>
+
+        <!-- Screen 2: Create Event - Basics -->
+        <div class="screen" id="create-event">
+            <div class="header">
+                <h1>Create Event</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('home')">← Back</button>
+                
+                <div class="input-group">
+                    <label>Event Name *</label>
+                    <input type="text" placeholder="e.g., Sarah's Graduation Party">
+                </div>
+                
+                <div class="input-group">
+                    <label>Event Type *</label>
+                    <select>
+                        <option>Birthday</option>
+                        <option>Graduation</option>
+                        <option>Baby Shower</option>
+                        <option>Holiday Party</option>
+                        <option>Family Gathering</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label>Date & Time *</label>
+                    <input type="datetime-local">
+                </div>
+                
+                <div class="input-group">
+                    <label>Location *</label>
+                    <input type="text" placeholder="Address or venue">
+                </div>
+                
+                <div class="input-group">
+                    <label>Dress Code</label>
+                    <input type="text" placeholder="e.g., Summer casual, Formal">
+                </div>
+                
+                <div class="input-group">
+                    <label>Food Style *</label>
+                    <select>
+                        <option>Host-Provided Menu (I'm providing all food)</option>
+                        <option>Potluck (Guests bring dishes)</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-primary" onclick="showScreen('add-cohosts')">Next: Add Co-Hosts</button>
+            </div>
+        </div>
+
+        <!-- Screen 3: Add Co-Hosts -->
+        <div class="screen" id="add-cohosts">
+            <div class="header">
+                <h1>Add Co-Hosts</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('create-event')">← Back</button>
+                
+                <div class="section">
+                    <h3>Host Team</h3>
+                    <div class="host-list">
+                        <div class="host-item">
+                            <div>
+                                <strong>You</strong>
+                                <div style="font-size: 12px; color: #666;">Primary Host</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Add Co-Host (Email or Phone)</label>
+                    <input type="text" placeholder="maria@email.com or (555) 123-4567">
+                </div>
+                
+                <button class="btn btn-secondary" style="margin-bottom: 20px;">+ Add Co-Host</button>
+                
+                <div class="section">
+                    <h3>Communication Lead 📣</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 12px;">This person will send all invites and updates to guests</p>
+                    <select class="input-group" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
+                        <option>You (Primary Host)</option>
+                        <option>Maria Garcia</option>
+                        <option>James Smith</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-primary" onclick="showScreen('event-details')">Continue to Event Setup</button>
+                <button class="btn btn-secondary" onclick="showScreen('event-details')">Skip for Now</button>
+            </div>
+        </div>
+
+        <!-- Screen 4: Event Details (Host View) -->
+        <div class="screen" id="event-details">
+            <div class="header">
+                <h1>Sarah's Graduation Party</h1>
+                <p style="opacity: 0.9; font-size: 14px;">December 15, 2025 • 4:00 PM</p>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('home')">← Back to Events</button>
+                
+                <div class="rsvp-stats">
+                    <div class="stat">
+                        <div class="stat-number">35</div>
+                        <div class="stat-label">Yes</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Maybe</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">10</div>
+                        <div class="stat-label">No</div>
+                    </div>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('overview')">Overview</button>
+                    <button class="tab" onclick="showTab('guests')">Guests</button>
+                    <button class="tab" onclick="showTab('potluck')">Potluck</button>
+                    <button class="tab" onclick="showTab('more')">More</button>
+                </div>
+                
+                <div id="tab-content">
+                    <div class="section">
+                        <h3>Host Team</h3>
+                        <div class="host-list">
+                            <div class="host-item">
+                                <div>
+                                    <strong>You</strong> <span class="badge badge-comm">📣 Comm Lead</span>
+                                </div>
+                            </div>
+                            <div class="host-item">
+                                <div>
+                                    <strong>Maria Garcia</strong>
+                                    <div style="font-size: 12px; color: #666;">Co-Host</div>
+                                </div>
+                            </div>
+                            <div class="host-item">
+                                <div>
+                                    <strong>James Smith</strong>
+                                    <div style="font-size: 12px; color: #666;">Co-Host</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" onclick="showScreen('host-activity')">View Host Activity Feed</button>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>Quick Actions</h3>
+                        <button class="btn btn-secondary" onclick="showScreen('guests')">👥 Manage Guest List (50)</button>
+                        <button class="btn btn-secondary" onclick="showScreen('host-menu')">🍽️ Manage Food Menu</button>
+                        <button class="btn btn-secondary" onclick="showScreen('drink-calculator')">🍹 Drink Calculator</button>
+                        <button class="btn btn-secondary" onclick="showScreen('gift-registry')">🎁 Manage Gift Registry</button>
+                        <button class="btn btn-secondary" onclick="showScreen('music')">🎵 Music Playlist</button>
+                        <button class="btn btn-secondary">📸 Photo Album</button>
+                        <button class="btn btn-secondary">📍 Location & Details</button>
+                    </div>
+                    
+                    <button class="btn btn-primary">Send Invites to All</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 5: Guest List Management -->
+        <div class="screen" id="guests">
+            <div class="header">
+                <h1>Guest List</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('event-details')">← Back</button>
+                
+                <div class="rsvp-stats">
+                    <div class="stat">
+                        <div class="stat-number">35</div>
+                        <div class="stat-label">Yes</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Maybe</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">10</div>
+                        <div class="stat-label">No</div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary" style="margin-bottom: 15px;">+ Import from Contacts</button>
+                
+                <div class="input-group">
+                    <input type="text" placeholder="Search guests...">
+                </div>
+                
+                <h3 style="margin-bottom: 10px;">Attending (35)</h3>
+                <div class="potluck-item">
+                    <strong>Jake Thompson</strong> <span style="color: #00b894;">✓ Yes</span>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">+1 guest</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Emily Chen</strong> <span style="color: #00b894;">✓ Yes</span>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">No additional guests</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Michael Rodriguez</strong> <span style="color: #00b894;">✓ Yes</span>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Bringing chips & salsa</div>
+                </div>
+                
+                <h3 style="margin-top: 20px; margin-bottom: 10px;">Maybe (5)</h3>
+                <div class="potluck-item">
+                    <strong>Alex Kim</strong> <span style="color: #fdcb6e;">? Maybe</span>
+                </div>
+                
+                <h3 style="margin-top: 20px; margin-bottom: 10px;">Not Yet Responded (10)</h3>
+                <div class="potluck-item">
+                    <strong>Jordan Lee</strong> <span style="color: #b2bec3;">Pending</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 6: Host Menu Management (Host-Provided) -->
+        <div class="screen" id="host-menu">
+            <div class="header">
+                <h1>Food Menu</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('event-details')">← Back</button>
+                
+                <div style="background: #e7f3ff; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #004085;">
+                    ℹ️ This is a host-provided menu. Guests will view the menu and can note dietary restrictions.
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Appetizers</h3>
+                <div class="potluck-item">
+                    <strong>Shrimp Cocktail</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Host Provided</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Cheese & Crackers Platter</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Host Provided</div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Main Dishes</h3>
+                <div class="potluck-item">
+                    <strong>BBQ Ribs</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Host Provided</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Grilled Chicken</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Host Provided</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Vegetarian Pasta</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Host Provided • Vegetarian</div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Sides</h3>
+                <div class="potluck-item">
+                    <strong>Coleslaw</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Host Provided</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Corn on the Cob</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Host Provided</div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Desserts</h3>
+                <div class="potluck-item">
+                    <strong>Graduation Cake</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Host Provided</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Cookies</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Host Provided</div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Drinks 🍹</h3>
+                <div style="background: #e7f3ff; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <strong>Use Drink Calculator</strong>
+                            <div style="font-size: 12px; color: #004085; margin-top: 4px;">Get personalized recommendations based on your guest count</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="showScreen('drink-calculator')" style="padding: 8px 16px;">Calculate</button>
+                    </div>
+                </div>
+                
+                <div class="potluck-item">
+                    <strong>Beer (3 cases, 24-pack)</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Host Provided • From Drink Calculator</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Wine (6 bottles: 4 white, 2 red)</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Host Provided • From Drink Calculator</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Soft Drinks (10 bottles, 2-liter)</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Host Provided • From Drink Calculator</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Water (5 cases, 24-pack)</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Host Provided • From Drink Calculator</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Ice (4 bags, 20 lb each)</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Host Provided • From Drink Calculator</div>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">Guest Dietary Restrictions (5)</h3>
+                <div style="background: #fff3cd; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                    <strong>Emily Chen:</strong> Vegetarian
+                </div>
+                <div style="background: #fff3cd; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                    <strong>Michael Rodriguez:</strong> Gluten-free
+                </div>
+                <div style="background: #fff3cd; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                    <strong>Sarah Martinez:</strong> Nut allergy
+                </div>
+                <div style="background: #fff3cd; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                    <strong>Alex Kim:</strong> Lactose intolerant
+                </div>
+                <div style="background: #fff3cd; padding: 12px; border-radius: 8px;">
+                    <strong>Jordan Lee:</strong> Vegan
+                </div>
+                
+                <button class="btn btn-secondary" style="margin-top: 15px;">+ Add Menu Item</button>
+                <button class="btn btn-secondary">📋 Generate Shopping List</button>
+            </div>
+        </div>
+
+        <!-- Screen 6b: Drink Calculator -->
+        <div class="screen" id="drink-calculator">
+            <div class="header">
+                <h1>Drink Calculator 🍹</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('event-details')">← Back</button>
+                
+                <div style="background: #e7f3ff; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #004085;">
+                    ℹ️ Calculate exactly how much beer, wine, spirits, and non-alcoholic drinks you need based on your guest count and event details.
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Event Details</h3>
+                
+                <div class="input-group">
+                    <label>Number of Guests *</label>
+                    <input type="number" value="50" placeholder="50">
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Currently: 50 guests RSVPed</div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Event Duration *</label>
+                    <div style="display: flex; gap: 10px; margin-top: 8px;">
+                        <button class="btn btn-secondary" style="flex: 1;">3 Hours</button>
+                        <button class="btn btn-primary" style="flex: 1;">4 Hours</button>
+                        <button class="btn btn-secondary" style="flex: 1;">5+ Hours</button>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Event Vibe</label>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                        <span style="font-size: 12px; color: #666;">Casual</span>
+                        <input type="range" min="1" max="5" value="3" style="flex: 1;">
+                        <span style="font-size: 12px; color: #666;">Big Party</span>
+                    </div>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px; text-align: center;">Moderate celebration</div>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">Additional Factors (Optional)</h3>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <strong>Food will be served</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Reduces alcohol consumption by 25%</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <strong>Outdoor event</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Increases water/ice needs by 50%</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <strong>Children attending</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Adjusts for non-drinkers</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <strong>Alcohol-free event</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Show only non-alcoholic beverages</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="showScreen('drink-calculator-results')" style="width: 100%; margin-bottom: 15px;">Calculate Drink Needs</button>
+                
+                <button class="btn btn-secondary" style="width: 100%;">Advanced Options (Drink Preferences)</button>
+            </div>
+        </div>
+
+        <!-- Screen 6c: Drink Calculator Results -->
+        <div class="screen" id="drink-calculator-results">
+            <div class="header">
+                <h1>Your Shopping List 🛒</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('drink-calculator')">← Back to Calculator</button>
+                
+                <div style="background: #d4edda; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #155724; text-align: center;">
+                    ✓ Based on 50 guests, 4 hours, moderate celebration
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">🍺 Alcoholic Beverages</h3>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: start; justify-content: space-between;">
+                        <input type="checkbox" style="margin-top: 4px; margin-right: 10px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Beer</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">80 beers needed (40% of drinkers prefer beer)</div>
+                            <div style="font-size: 14px; color: #00b894; margin-top: 4px;">✓ 3-4 cases (24-pack) = 72-96 beers</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 4px;">Suggested: 50% Light Lager, 30% IPA, 20% Variety</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: start; justify-content: space-between;">
+                        <input type="checkbox" style="margin-top: 4px; margin-right: 10px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Wine</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">30 glasses needed (5 oz each)</div>
+                            <div style="font-size: 14px; color: #00b894; margin-top: 4px;">✓ 6 bottles (750ml)</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 4px;">Suggested: 4 white, 2 red (adjust by season)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: start; justify-content: space-between;">
+                        <input type="checkbox" style="margin-top: 4px; margin-right: 10px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Spirits & Cocktails</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">40 cocktails needed</div>
+                            <div style="font-size: 14px; color: #00b894; margin-top: 4px;">✓ 4 bottles (750ml each)</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 4px;">1 vodka, 1 tequila, 1 rum, 1 whiskey</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">🥤 Non-Alcoholic Beverages</h3>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: start; justify-content: space-between;">
+                        <input type="checkbox" style="margin-top: 4px; margin-right: 10px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Soft Drinks / Soda</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">150 servings (8 oz each)</div>
+                            <div style="font-size: 14px; color: #00b894; margin-top: 4px;">✓ 10-12 bottles (2-liter)</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 4px;">Suggested: 50% Cola, 25% Lemon-Lime, 25% Other</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: start; justify-content: space-between;">
+                        <input type="checkbox" style="margin-top: 4px; margin-right: 10px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Water</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">150 bottles needed (outdoor event)</div>
+                            <div style="font-size: 14px; color: #00b894; margin-top: 4px;">✓ 5 cases (24-pack, 16 oz bottles)</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 4px;">Increased 50% for outdoor event</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: start; justify-content: space-between;">
+                        <input type="checkbox" style="margin-top: 4px; margin-right: 10px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Ice</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">75 lbs needed (1.5 lb per person, outdoor event)</div>
+                            <div style="font-size: 14px; color: #00b894; margin-top: 4px;">✓ 4 bags (20 lb each)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">🍋 Mixers & Extras</h3>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: start; justify-content: space-between;">
+                        <input type="checkbox" style="margin-top: 4px; margin-right: 10px;">
+                        <div style="flex: 1;">
+                            <div style="font-size: 14px; margin-bottom: 4px;">☐ 4 liters tonic water</div>
+                            <div style="font-size: 14px; margin-bottom: 4px;">☐ 4 liters club soda</div>
+                            <div style="font-size: 14px; margin-bottom: 4px;">☐ 2 bottles cranberry juice</div>
+                            <div style="font-size: 14px; margin-bottom: 4px;">☐ 2 bottles orange juice</div>
+                            <div style="font-size: 14px;">☐ 2 limes, 2 lemons</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <strong>💰 Estimated Total Cost: $275-$325</strong>
+                    <div style="font-size: 13px; color: #856404; margin-top: 8px;">
+                        • Alcohol: $180-$220<br>
+                        • Non-alcoholic: $60-$70<br>
+                        • Mixers & ice: $35-$35
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px;">Add Drinks to Event Menu</button>
+                <button class="btn btn-secondary" style="width: 100%; margin-bottom: 10px;">📋 Copy Shopping List</button>
+                <button class="btn btn-secondary" style="width: 100%; margin-bottom: 10px;">📧 Email Shopping List</button>
+                <button class="btn btn-secondary" style="width: 100%;">🛒 Buy at Costco (Partner Link)</button>
+            </div>
+        </div>
+
+        <!-- Screen 6d: Gift Registry Management (Host View) -->
+        <div class="screen" id="gift-registry">
+            <div class="header">
+                <h1>Gift Registry</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('event-details')">← Back</button>
+                
+                <div style="background: #e7f3ff; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #004085;">
+                    ℹ️ Share your gift registry or wishlist with guests. They'll see it on the event page.
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Registry Type</h3>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 2px solid #667eea;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <input type="radio" name="registry-type" id="external-registry" checked style="margin-right: 8px;">
+                            <label for="external-registry" style="font-weight: bold;">External Registry Link</label>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px; margin-left: 24px;">Link to Amazon, Target, or other registries</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <input type="radio" name="registry-type" id="group-gift" style="margin-right: 8px;">
+                            <label for="group-gift" style="font-weight: bold;">Group Gift Collection</label>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px; margin-left: 24px;">Collect money from guests for a specific gift</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">Your Registry</h3>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Amazon Wishlist</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">12 items • Created Jan 2025</div>
+                            <div style="font-size: 12px; color: #667eea; margin-top: 4px;">🔗 amazon.com/registry/sarah-graduation</div>
+                        </div>
+                        <div>
+                            <button class="btn btn-secondary" style="padding: 8px 16px; margin-right: 8px;">Edit</button>
+                            <button class="btn btn-secondary" style="padding: 8px 16px;">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary" style="margin-bottom: 10px;">+ Add Another Registry</button>
+                
+                <h3 style="margin: 25px 0 10px;">Registry Settings</h3>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                        <div>
+                            <strong>Show registry to guests</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Guests will see your registry on the event page</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <strong>Include "gifts optional" message</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Reminds guests that gifts are not required</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">Preview</h3>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 2px dashed #667eea;">
+                    <div style="text-align: center; color: #666;">
+                        <p style="font-size: 14px; margin-bottom: 10px;">This is how guests will see your registry:</p>
+                        <div style="background: white; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                            <strong>Amazon Wishlist</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">12 items available</div>
+                            <button class="btn btn-secondary" style="padding: 8px 16px; margin-top: 8px;">View Registry</button>
+                        </div>
+                        <div style="background: #fff3cd; padding: 12px; border-radius: 8px;">
+                            <p style="font-size: 14px; color: #856404; margin: 0;">💡 <strong>Tip:</strong> Gifts are optional! Your presence is the best present.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 6b: Gift Registry Management (Host View) -->
+        <div class="screen" id="gift-registry">
+            <div class="header">
+                <h1>Gift Registry</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('event-details')">← Back</button>
+                
+                <div style="background: #e7f3ff; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #004085;">
+                    🎁 Guests can view your registry and mark items as purchased
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab active">All Items (15)</button>
+                    <button class="tab">Purchased (3)</button>
+                    <button class="tab">Group Gifts (2)</button>
+                </div>
+                
+                <div style="background: #d4edda; padding: 12px; border-radius: 8px; margin-bottom: 20px;">
+                    <strong>Registry Status:</strong>
+                    <div style="font-size: 13px; color: #155724; margin-top: 6px;">
+                        • 3 items purchased ($179.97)
+                        <br>• 12 items remaining ($1,568.93)
+                        <br>• $900 raised in group gifts
+                    </div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">For Her New Apartment</h3>
+                
+                <div class="potluck-item">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <strong>KitchenAid Stand Mixer</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Amazon • $379.99</div>
+                            <div style="font-size: 12px; color: #667eea; margin-top: 4px;">✨ High Priority</div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 8px 12px; font-size: 13px;">Edit</button>
+                    </div>
+                </div>
+                
+                <div class="potluck-item" style="background: #f0f9ff; border: 2px solid #00b894;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <strong>Coffee Maker</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Target • $89.99</div>
+                            <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Purchased by Emily Chen</div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 8px 12px; font-size: 13px;">Edit</button>
+                    </div>
+                </div>
+                
+                <div class="potluck-item">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <strong>Cookware Set (12-piece)</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Amazon • $199.99</div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 8px 12px; font-size: 13px;">Edit</button>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">For Work & Career</h3>
+                
+                <div class="potluck-item">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <strong>Professional Laptop Bag</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Amazon • $79.99</div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 8px 12px; font-size: 13px;">Edit</button>
+                    </div>
+                </div>
+                
+                <div class="potluck-item" style="background: #f0f9ff; border: 2px solid #00b894;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <strong>Desk Lamp</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Target • $39.99</div>
+                            <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Purchased by Michael Rodriguez</div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 8px 12px; font-size: 13px;">Edit</button>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">🤝 Group Gifts</h3>
+                
+                <div class="potluck-item" style="border: 2px solid #667eea;">
+                    <div>
+                        <strong>Laptop for New Job</strong>
+                        <div style="font-size: 12px; color: #666; margin-top: 4px;">Apple MacBook Air • $1,199</div>
+                        <div style="margin-top: 10px; background: #f0f0f0; border-radius: 8px; height: 8px; overflow: hidden;">
+                            <div style="background: #667eea; width: 45%; height: 100%;"></div>
+                        </div>
+                        <div style="font-size: 12px; color: #666; margin-top: 6px;">$540 of $1,199 raised • 8 contributors</div>
+                        <div style="font-size: 11px; color: #999; margin-top: 4px;">Contributors: Jake, Lisa, Tom, Emily, Chris, Jordan, Alex, Sam</div>
+                        <button class="btn btn-secondary" style="margin-top: 10px; padding: 8px;">View Contributors</button>
+                    </div>
+                </div>
+                
+                <div class="potluck-item" style="border: 2px solid #667eea;">
+                    <div>
+                        <strong>Travel Fund for Europe Trip</strong>
+                        <div style="font-size: 12px; color: #666; margin-top: 4px;">Cash gift • Goal: $500</div>
+                        <div style="margin-top: 10px; background: #f0f0f0; border-radius: 8px; height: 8px; overflow: hidden;">
+                            <div style="background: #667eea; width: 72%; height: 100%;"></div>
+                        </div>
+                        <div style="font-size: 12px; color: #666; margin-top: 6px;">$360 of $500 raised • 12 contributors</div>
+                        <button class="btn btn-secondary" style="margin-top: 10px; padding: 8px;">View Contributors</button>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" style="margin-top: 20px;">+ Add Registry Item</button>
+                <button class="btn btn-secondary">+ Create Group Gift</button>
+                <button class="btn btn-secondary">🔗 Import from Amazon/Target</button>
+                
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                    <h4 style="margin-bottom: 8px;">💡 Registry Tips</h4>
+                    <p style="font-size: 13px; color: #856404; margin-bottom: 8px;">• Add items at various price points ($10-$500)</p>
+                    <p style="font-size: 13px; color: #856404; margin-bottom: 8px;">• Mark priorities so guests know what matters most</p>
+                    <p style="font-size: 13px; color: #856404;">• Group gifts are great for expensive items</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 6c: Drink Calculator -->
+        <div class="screen" id="drink-calculator">
+            <div class="header">
+                <h1>Event Drink Calculator 🍹</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('event-details')">← Back</button>
+                
+                <div style="background: #e7f3ff; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #004085;">
+                    ℹ️ We'll help you calculate the right amount of drinks for your event. Results can be added to your menu.
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Basic Event Info</h3>
+                
+                <div class="input-group">
+                    <label>Number of Guests *</label>
+                    <input type="number" value="50" id="guest-count">
+                </div>
+                
+                <div class="input-group">
+                    <label>Event Duration *</label>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-secondary" style="flex: 1;">3 Hours</button>
+                        <button class="btn btn-primary" style="flex: 1;">4 Hours</button>
+                        <button class="btn btn-secondary" style="flex: 1;">5+ Hours</button>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Event Vibe</label>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+                        <span style="font-size: 12px; color: #666;">Casual</span>
+                        <input type="range" min="1" max="5" value="3" style="flex: 1;">
+                        <span style="font-size: 12px; color: #666;">Big Party</span>
+                    </div>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px; text-align: center;">Current: Moderate Celebration</div>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">Additional Factors (Optional)</h3>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <strong>Food will be served</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Reduces alcohol consumption by 25%</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <strong>Outdoor event</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Increases water needs by 50%</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <strong>Children attending</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Adds non-alcoholic options</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <strong>Alcohol-free event</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Calculate only non-alcoholic drinks</div>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 16px;" onclick="showScreen('drink-results')">Calculate My Shopping List</button>
+            </div>
+        </div>
+
+        <!-- Screen 6d: Drink Calculator Results -->
+        <div class="screen" id="drink-results">
+            <div class="header">
+                <h1>Your Drink Shopping List 🛒</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('drink-calculator')">← Back to Calculator</button>
+                
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin-bottom: 20px; color: #155724; text-align: center;">
+                    ✓ Shopping list calculated for 50 guests, 4 hours
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">🍺 Alcoholic Beverages</h3>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <input type="checkbox" style="margin-right: 12px; width: 20px; height: 20px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Beer</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">3-4 cases (24-pack) = 72-96 beers</div>
+                            <div style="font-size: 12px; color: #667eea; margin-top: 4px;">💡 Mix: 50% Light Lager, 30% IPA, 20% Variety</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <input type="checkbox" style="margin-right: 12px; width: 20px; height: 20px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Wine</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">6 bottles (750ml each)</div>
+                            <div style="font-size: 12px; color: #667eea; margin-top: 4px;">💡 Suggested: 4 white, 2 red (or adjust by season)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <input type="checkbox" style="margin-right: 12px; width: 20px; height: 20px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Spirits (Vodka, Tequila, Rum, Whiskey)</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">4 bottles (750ml each) - variety pack</div>
+                            <div style="font-size: 12px; color: #667eea; margin-top: 4px;">💡 1 bottle each: Vodka, Tequila, Rum, Whiskey</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">🥤 Non-Alcoholic Beverages</h3>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <input type="checkbox" style="margin-right: 12px; width: 20px; height: 20px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Soft Drinks / Soda</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">10-12 bottles (2-liter) or 6-7 cases (12-pack cans)</div>
+                            <div style="font-size: 12px; color: #667eea; margin-top: 4px;">💡 Mix: 50% Cola, 25% Lemon-Lime, 25% Other</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <input type="checkbox" style="margin-right: 12px; width: 20px; height: 20px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Water</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">4-5 cases (24-pack, 16 oz bottles) = 100-120 bottles</div>
+                            <div style="font-size: 12px; color: #667eea; margin-top: 4px;">💡 Extra recommended for outdoor event</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <input type="checkbox" style="margin-right: 12px; width: 20px; height: 20px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Ice</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">3-4 bags (20 lb each) = 60-80 lbs total</div>
+                            <div style="font-size: 12px; color: #667eea; margin-top: 4px;">💡 1 lb per person + extra for cooling</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">🍋 Mixers & Extras</h3>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <input type="checkbox" style="margin-right: 12px; width: 20px; height: 20px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Mixers</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">4 liters tonic water, 4 liters club soda</div>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">2 bottles cranberry juice, 2 bottles orange juice</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <input type="checkbox" style="margin-right: 12px; width: 20px; height: 20px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Garnishes</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">2 limes, 2 lemons, fresh mint (optional)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <h4 style="margin-bottom: 8px;">💰 Estimated Budget</h4>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>Alcohol:</span>
+                        <strong>$180 - $220</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>Non-alcoholic:</span>
+                        <strong>$60 - $70</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>Mixers & Ice:</span>
+                        <strong>$35 - $40</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding-top: 8px; border-top: 2px solid #856404;">
+                        <strong>Total Estimate:</strong>
+                        <strong style="color: #667eea; font-size: 18px;">$275 - $330</strong>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" style="margin-bottom: 10px;">✓ Add to Event Menu</button>
+                <button class="btn btn-secondary" style="margin-bottom: 10px;">📧 Email Shopping List</button>
+                <button class="btn btn-secondary" style="margin-bottom: 10px;">📋 Copy to Clipboard</button>
+                <button class="btn btn-secondary">🔄 Recalculate</button>
+            </div>
+        </div>
+
+        <!-- Screen 6c: Drink Calculator -->
+        <div class="screen" id="drink-calculator">
+            <div class="header">
+                <h1>Drink Calculator 🍹</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('event-details')">← Back</button>
+                
+                <div style="background: #e7f3ff; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #004085;">
+                    ℹ️ Calculate how much to buy based on your guest count and event style
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Event Details</h3>
+                
+                <div class="input-group">
+                    <label>Number of Guests *</label>
+                    <input type="number" value="50" style="font-size: 16px; font-weight: bold;">
+                </div>
+                
+                <div class="input-group">
+                    <label>Event Duration *</label>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn btn-secondary" style="flex: 1;">3 Hours</button>
+                        <button class="btn btn-primary" style="flex: 1;">4 Hours</button>
+                        <button class="btn btn-secondary" style="flex: 1;">5+ Hours</button>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Event Vibe</label>
+                    <div style="padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span style="font-size: 14px; color: #666;">Casual Gathering</span>
+                            <span style="font-size: 14px; color: #666;">Big Celebration</span>
+                        </div>
+                        <input type="range" min="1" max="10" value="6" style="width: 100%;">
+                        <div style="text-align: center; margin-top: 8px; color: #667eea; font-weight: bold;">Moderate Party</div>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">Customize (Optional)</h3>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <input type="checkbox" checked style="margin-right: 10px; width: 18px; height: 18px;">
+                        <strong>Beer (40%)</strong>
+                    </label>
+                    <label style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <input type="checkbox" checked style="margin-right: 10px; width: 18px; height: 18px;">
+                        <strong>Wine (30%)</strong>
+                    </label>
+                    <label style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <input type="checkbox" checked style="margin-right: 10px; width: 18px; height: 18px;">
+                        <strong>Cocktails/Spirits (20%)</strong>
+                    </label>
+                    <label style="display: flex; align-items: center;">
+                        <input type="checkbox" checked style="margin-right: 10px; width: 18px; height: 18px;">
+                        <strong>Non-alcoholic beverages (10%)</strong>
+                    </label>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">Additional Factors</h3>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <label style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <input type="checkbox" checked style="margin-right: 10px; width: 18px; height: 18px;">
+                        <span>Food will be served</span>
+                    </label>
+                    <label style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <input type="checkbox" checked style="margin-right: 10px; width: 18px; height: 18px;">
+                        <span>Outdoor event (more water needed)</span>
+                    </label>
+                    <label style="display: flex; align-items: center;">
+                        <input type="checkbox" style="margin-right: 10px; width: 18px; height: 18px;">
+                        <span>Children attending</span>
+                    </label>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%;" onclick="showScreen('drink-results')">Calculate Shopping List</button>
+            </div>
+        </div>
+
+        <!-- Screen 6d: Drink Calculator Results -->
+        <div class="screen" id="drink-results">
+            <div class="header">
+                <h1>Your Drink Shopping List 🛒</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('drink-calculator')">← Back to Calculator</button>
+                
+                <div style="background: #d4edda; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #155724; text-align: center;">
+                    ✓ Shopping list for 50 guests, 4 hours, moderate celebration
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">🍺 Alcohol</h3>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <label style="display: flex; align-items: flex-start;">
+                        <input type="checkbox" style="margin-right: 12px; margin-top: 4px; width: 18px; height: 18px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Beer</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">3-4 cases (24-pack) = 72-96 beers</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 4px;">Suggested: 50% Light Lager, 30% IPA, 20% Variety</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <label style="display: flex; align-items: flex-start;">
+                        <input type="checkbox" style="margin-right: 12px; margin-top: 4px; width: 18px; height: 18px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Wine</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">6 bottles (750ml)</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 4px;">Suggested: 4 white, 2 red (or adjust by season)</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <label style="display: flex; align-items: flex-start;">
+                        <input type="checkbox" style="margin-right: 12px; margin-top: 4px; width: 18px; height: 18px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Spirits</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">4 bottles (750ml each)</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 4px;">Suggested: 1 vodka, 1 tequila, 1 rum, 1 whiskey</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">🥤 Non-Alcoholic</h3>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <label style="display: flex; align-items: flex-start;">
+                        <input type="checkbox" style="margin-right: 12px; margin-top: 4px; width: 18px; height: 18px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Soft Drinks</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">10-12 bottles (2-liter) or 6-7 cases (12-pack cans)</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 4px;">Suggested: 50% Cola, 25% Lemon-Lime, 25% Other</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <label style="display: flex; align-items: flex-start;">
+                        <input type="checkbox" style="margin-right: 12px; margin-top: 4px; width: 18px; height: 18px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Water</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">4-6 cases (24-pack, 16 oz bottles) = 96-144 bottles</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 4px;">Extra recommended for outdoor event</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <label style="display: flex; align-items: flex-start;">
+                        <input type="checkbox" style="margin-right: 12px; margin-top: 4px; width: 18px; height: 18px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Ice</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">3-4 bags (20 lb each) = 60-80 lbs total</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 4px;">Rule: 1 lb per person</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">🍋 Mixers & Garnishes</h3>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                    <label style="display: flex; align-items: flex-start;">
+                        <input type="checkbox" style="margin-right: 12px; margin-top: 4px; width: 18px; height: 18px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Mixers</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">4 liters tonic water, 4 liters club soda</div>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">2 bottles cranberry juice, 2 bottles orange juice</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <div style="background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <label style="display: flex; align-items: flex-start;">
+                        <input type="checkbox" style="margin-right: 12px; margin-top: 4px; width: 18px; height: 18px;">
+                        <div style="flex: 1;">
+                            <strong style="font-size: 16px;">Garnishes</strong>
+                            <div style="font-size: 14px; color: #666; margin-top: 4px;">2 limes, 2 lemons, fresh mint (optional)</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">💰 Budget Estimate</h3>
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Alcohol:</span>
+                        <strong>$180-$220</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Non-alcoholic:</span>
+                        <strong>$60-$70</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding-top: 8px; border-top: 2px solid #e0e0e0;">
+                        <span style="font-size: 16px;"><strong>Estimated Total:</strong></span>
+                        <strong style="font-size: 18px; color: #667eea;">$275-$325</strong>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%; margin-bottom: 10px;">Add to Food Menu</button>
+                <button class="btn btn-secondary" style="width: 100%; margin-bottom: 10px;">📋 Copy Shopping List</button>
+                <button class="btn btn-secondary" style="width: 100%;">📧 Email Shopping List</button>
+            </div>
+        </div>
+
+        <!-- Screen 7: Potluck Coordinator (Holiday Potluck) -->
+        <div class="screen" id="potluck">
+            <div class="header">
+                <h1>Holiday Potluck - Potluck Board</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('event-details-cohost')">← Back</button>
+                
+                <div style="background: #e7f3ff; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #004085;">
+                    🍽️ This is a potluck event - guests can claim items to bring!
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab active">Potluck Items</button>
+                    <button class="tab">Last-Minute Needs</button>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Appetizers</h3>
+                <div class="potluck-item claimed">
+                    <strong>Chips & Salsa</strong>
+                    <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Claimed by Michael Rodriguez</div>
+                </div>
+                <div class="potluck-item claimed">
+                    <strong>Veggie Platter</strong>
+                    <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Claimed by Emily Chen</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Cheese & Crackers</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Spinach Dip</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Main Dishes</h3>
+                <div class="potluck-item claimed">
+                    <strong>Honey Glazed Ham</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">✓ Host Provided (Maria)</div>
+                </div>
+                <div class="potluck-item claimed">
+                    <strong>Mac & Cheese</strong>
+                    <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Claimed by Jake Thompson</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Pasta Salad</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Green Bean Casserole</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Sides</h3>
+                <div class="potluck-item claimed">
+                    <strong>Mashed Potatoes</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">✓ Host Provided (Tom)</div>
+                </div>
+                <div class="potluck-item claimed">
+                    <strong>Dinner Rolls</strong>
+                    <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Claimed by Lisa Brown</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Cranberry Sauce</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Desserts</h3>
+                <div class="potluck-item claimed">
+                    <strong>Pumpkin Pie</strong>
+                    <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Claimed by Sarah Martinez</div>
+                </div>
+                <div class="potluck-item claimed">
+                    <strong>Chocolate Cake</strong>
+                    <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Claimed by Chris Lee</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Cookies</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Drinks 🍹</h3>
+                <div style="background: #e7f3ff; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <strong>Need help with drink quantities?</strong>
+                            <div style="font-size: 12px; color: #004085; margin-top: 4px;">Use our drink calculator for personalized recommendations</div>
+                        </div>
+                        <button class="btn btn-primary" onclick="showScreen('drink-calculator')" style="padding: 8px 16px;">Calculate</button>
+                    </div>
+                </div>
+                <div class="potluck-item claimed">
+                    <strong>Eggnog</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">✓ Host Provided (Maria)</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Beer (2-3 cases)</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Wine (4-6 bottles)</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Sodas</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Sparkling Cider</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                <div class="potluck-item">
+                    <strong>Water & Ice</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">🚨 Last-Minute Needs</h3>
+                <div class="potluck-item" style="border: 2px solid #e17055;">
+                    <strong>Ice</strong>
+                    <div style="font-size: 12px; color: #e17055; margin-top: 4px;">⚠️ Needed! Click to claim</div>
+                </div>
+                <div class="potluck-item" style="border: 2px solid #e17055;">
+                    <strong>Paper Plates</strong>
+                    <div style="font-size: 12px; color: #e17055; margin-top: 4px;">⚠️ Needed! Click to claim</div>
+                </div>
+                
+                <button class="btn btn-secondary" style="margin-top: 15px;">+ Add Potluck Item</button>
+                <button class="btn btn-secondary">+ Add Last-Minute Need</button>
+            </div>
+        </div>
+
+        <!-- Screen 8: Music Dashboard -->
+        <div class="screen" id="music">
+            <div class="header">
+                <h1>Music Dashboard</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('event-details')">← Back</button>
+                
+                <div class="tabs">
+                    <button class="tab active">Pre-Event</button>
+                    <button class="tab">Live Tracking</button>
+                    <button class="tab">Recap</button>
+                </div>
+                
+                <div class="section">
+                    <h3>AI Playlist Generator</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 12px;">Create the perfect vibe for your party</p>
+                    
+                    <div class="input-group">
+                        <label>Select Vibe</label>
+                        <select>
+                            <option>Upbeat & Energetic</option>
+                            <option>Chill & Relaxed</option>
+                            <option>Dance Party</option>
+                            <option>Background Music</option>
+                            <option>Custom Mix</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Genre Preferences</label>
+                        <input type="text" placeholder="e.g., Pop, Hip-Hop, R&B">
+                    </div>
+                    
+                    <button class="btn btn-primary">Generate Playlist with AI</button>
+                </div>
+                
+                <div class="section">
+                    <h3>Collaborative Playlist</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 12px;">Let guests suggest songs before the party</p>
+                    <button class="btn btn-secondary">Enable Guest Contributions</button>
+                </div>
+                
+                <div class="section">
+                    <h3>Current Playlist (23 songs)</h3>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
+                        <div style="margin-bottom: 10px;">
+                            <strong>Good Days</strong> - SZA
+                        </div>
+                        <div style="margin-bottom: 10px;">
+                            <strong>Levitating</strong> - Dua Lipa
+                        </div>
+                        <div>
+                            <strong>Heat Waves</strong> - Glass Animals
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" style="margin-top: 12px;">Export to Spotify</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 8: Host Activity Feed -->
+        <div class="screen" id="host-activity">
+            <div class="header">
+                <h1>Host Activity Feed</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('event-details')">← Back</button>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">📣</div>
+                    <div class="activity-content">
+                        <div class="activity-text"><strong>You</strong> sent invites to 50 guests</div>
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">🍽️</div>
+                    <div class="activity-content">
+                        <div class="activity-text"><strong>James</strong> added "Last-Minute Needs" section to potluck</div>
+                        <div class="activity-time">4 hours ago</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">✅</div>
+                    <div class="activity-content">
+                        <div class="activity-text">12 new RSVPs received</div>
+                        <div class="activity-time">5 hours ago</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">📝</div>
+                    <div class="activity-content">
+                        <div class="activity-text"><strong>Maria</strong> updated the dress code to "Summer Casual"</div>
+                        <div class="activity-time">Yesterday</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">📍</div>
+                    <div class="activity-content">
+                        <div class="activity-text"><strong>You</strong> added parking instructions</div>
+                        <div class="activity-time">Yesterday</div>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">🎵</div>
+                    <div class="activity-content">
+                        <div class="activity-text"><strong>James</strong> created AI playlist (23 songs)</div>
+                        <div class="activity-time">2 days ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 9: Attendee Home -->
+        <div class="screen" id="attend-home">
+            <div class="header">
+                <h1>Bust a Move</h1>
+                <p style="opacity: 0.9; font-size: 14px;">Your upcoming events</p>
+                <div class="toggle-container">
+                    <div class="toggle">
+                        <button class="toggle-btn" onclick="switchMode('host')">Hosting</button>
+                        <button class="toggle-btn active" onclick="switchMode('attend')">Attending</button>
+                        <button class="toggle-btn" onclick="switchMode('past')">Past Events</button>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <h2 style="margin-bottom: 15px;">Upcoming Events</h2>
+                
+                <div class="event-card" onclick="showScreen('attend-event-details')">
+                    <h3>Sarah's Graduation Party</h3>
+                    <p>📅 December 15, 2025 • 4:00 PM</p>
+                    <p>📍 123 Main St, Apartment 4B</p>
+                    <p style="color: #00b894; margin-top: 8px;">✓ You're attending</p>
+                </div>
+                
+                <div class="event-card" onclick="showScreen('attend-holiday-potluck')">
+                    <h3>Holiday Potluck</h3>
+                    <p>📅 December 23, 2025 • 6:00 PM</p>
+                    <p>📍 Maria's House</p>
+                    <p style="color: #00b894; margin-top: 8px;">✓ You're attending</p>
+                </div>
+                
+                <div class="event-card" style="border: 2px solid #fdcb6e;">
+                    <h3>New Year's Eve Bash</h3>
+                    <p>📅 December 31, 2025 • 9:00 PM</p>
+                    <p>📍 Downtown Venue</p>
+                    <p style="color: #e17055; margin-top: 8px;">⚠️ Time conflict with another event!</p>
+                </div>
+                
+                <button class="btn btn-secondary" style="margin-top: 15px;" onclick="showScreen('attend-calendar')">View Calendar</button>
+            </div>
+        </div>
+
+        <!-- Screen 10: Attendee Event Details (Sarah's Graduation Party) -->
+        <div class="screen" id="attend-event-details">
+            <div class="header">
+                <h1>Sarah's Graduation Party</h1>
+                <p style="opacity: 0.9; font-size: 14px;">Hosted by Sarah, Maria & James</p>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('attend-home')">← Back</button>
+                
+                <div style="background: #d4edda; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; color: #155724;">
+                    ✓ You're attending this event
+                </div>
+                
+                <div class="section">
+                    <div class="detail-row">
+                        <span class="detail-label">Date & Time</span>
+                        <span class="detail-value">Dec 15, 2025 • 4:00 PM</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Location</span>
+                        <span class="detail-value">123 Main St, Apt 4B</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Dress Code</span>
+                        <span class="detail-value">Summer Casual</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Parking</span>
+                        <span class="detail-value">Visitor spots available</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Building Code</span>
+                        <span class="detail-value">#1234</span>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary">📍 Get Directions</button>
+                <button class="btn btn-secondary">📅 Add to Calendar</button>
+                
+                <div class="section">
+                    <h3>Guest List (35 attending)</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 10px;">See who else is coming</p>
+                    <div style="background: #f8f9fa; padding: 12px; border-radius: 8px;">
+                        <div style="margin-bottom: 8px;">Jake Thompson, Emily Chen, Michael Rodriguez...</div>
+                        <button class="btn btn-secondary">View Full List</button>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Gift Registry 🎁</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Sarah has shared a gift registry</p>
+                    <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <div style="flex: 1;">
+                                <strong>Amazon Wishlist</strong>
+                                <div style="font-size: 12px; color: #666; margin-top: 4px;">12 items available</div>
+                            </div>
+                            <button class="btn btn-secondary" style="padding: 8px 16px;">View Registry</button>
+                        </div>
+                    </div>
+                    <div style="background: #fff3cd; padding: 12px; border-radius: 8px;">
+                        <p style="font-size: 14px; color: #856404; margin: 0;">💡 <strong>Tip:</strong> Gifts are optional! Your presence is the best present.</p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Food Menu 🍽️</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 10px;">The hosts will be providing the following menu</p>
+                    <button class="btn btn-secondary" onclick="showScreen('attend-menu')">View Full Menu</button>
+                </div>
+                
+                <div class="section">
+                    <h3>Gift Registry 🎁</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Sarah has created a gift registry</p>
+                    <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong>Amazon Registry</strong>
+                                <div style="font-size: 12px; color: #666; margin-top: 4px;">15 items</div>
+                            </div>
+                            <span style="color: #00b894;">→</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="showScreen('attend-gift-registry')">View Gift Registry</button>
+                </div>
+                
+                <div class="section">
+                    <h3>Your Dietary Restrictions</h3>
+                    <div style="background: #fff3cd; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <strong>Vegetarian</strong>
+                        <div style="font-size: 12px; color: #666; margin-top: 4px;">Hosts have been notified</div>
+                    </div>
+                    <button class="btn btn-secondary">Update Dietary Restrictions</button>
+                </div>
+                
+                <div class="section">
+                    <h3>Collaborative Music Playlist 🎵</h3>
+                    <p style="font-size: 14px; color: #00b894; margin-bottom: 10px;">✓ Host enabled song suggestions - add your favorites!</p>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 12px;">
+                        <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong>Good Days</strong> - SZA
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Added by Sarah (Host)</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong>Levitating</strong> - Dua Lipa
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Added by Maria (Host)</div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong>Heat Waves</strong> - Glass Animals
+                            <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Added by You</div>
+                        </div>
+                        <p style="font-size: 13px; color: #999; text-align: center;">+ 20 more songs</p>
+                    </div>
+                    <button class="btn btn-secondary">+ Suggest a Song</button>
+                    <button class="btn btn-secondary">View Full Playlist</button>
+                </div>
+                
+                <button class="btn btn-primary">Message Hosts</button>
+                <button class="btn btn-secondary">Update RSVP</button>
+            </div>
+        </div>
+
+        <!-- Screen 10b: Attendee Event Details (Holiday Potluck) -->
+        <div class="screen" id="attend-holiday-potluck">
+            <div class="header">
+                <h1>Holiday Potluck</h1>
+                <p style="opacity: 0.9; font-size: 14px;">Hosted by Maria, You & Tom</p>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('attend-home')">← Back</button>
+                
+                <div style="background: #d4edda; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; color: #155724;">
+                    ✓ You're attending this event
+                </div>
+                
+                <div class="section">
+                    <div class="detail-row">
+                        <span class="detail-label">Date & Time</span>
+                        <span class="detail-value">Dec 23, 2025 • 6:00 PM</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Location</span>
+                        <span class="detail-value">Maria's House</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Dress Code</span>
+                        <span class="detail-value">Festive Casual</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Parking</span>
+                        <span class="detail-value">Street parking available</span>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary">📍 Get Directions</button>
+                <button class="btn btn-secondary">📅 Add to Calendar</button>
+                
+                <div class="section">
+                    <h3>Guest List (28 attending)</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 10px;">See who else is coming</p>
+                    <div style="background: #f8f9fa; padding: 12px; border-radius: 8px;">
+                        <div style="margin-bottom: 8px;">Tom Williams, Emily Chen, Jake Thompson...</div>
+                        <button class="btn btn-secondary">View Full List</button>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Group Gift 🎁</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 10px;">Guests are chipping in for a group gift for Maria</p>
+                    <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin-bottom: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <div>
+                                <strong style="font-size: 16px;">Gift Card to Maria's Favorite Spa</strong>
+                                <div style="font-size: 12px; color: #666; margin-top: 4px;">15 people have contributed</div>
+                            </div>
+                        </div>
+                        <div style="background: white; padding: 8px; border-radius: 6px; margin-bottom: 10px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                <span style="font-size: 14px; color: #666;">Goal: $300</span>
+                                <span style="font-size: 14px; font-weight: bold; color: #00b894;">$225 raised</span>
+                            </div>
+                            <div style="background: #e0e0e0; height: 8px; border-radius: 4px; overflow: hidden;">
+                                <div style="background: #00b894; height: 100%; width: 75%;"></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%;">Contribute to Group Gift</button>
+                        <div style="font-size: 12px; color: #666; margin-top: 8px; text-align: center;">Suggested: $15-20 per person</div>
+                    </div>
+                    <div style="background: #fff3cd; padding: 12px; border-radius: 8px;">
+                        <p style="font-size: 14px; color: #856404; margin: 0;">💡 <strong>Tip:</strong> Contributions are optional. No pressure!</p>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Potluck Board 🍽️</h3>
+                    <div class="potluck-item claimed">
+                        <strong>Your Contribution: Mac & Cheese</strong>
+                        <button class="btn btn-secondary" style="margin-top: 8px; padding: 8px;">Change Item</button>
+                    </div>
+                    <button class="btn btn-secondary" onclick="showScreen('attend-potluck')">View All Potluck Items</button>
+                </div>
+                
+                <button class="btn btn-primary">Message Hosts</button>
+                <button class="btn btn-secondary">Update RSVP</button>
+            </div>
+        </div>
+
+        <!-- Screen 11: Attendee Menu View (Sarah's Graduation Party) -->
+        <div class="screen" id="attend-menu">
+            <div class="header">
+                <h1>Food Menu</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('attend-event-details')">← Back</button>
+                
+                <div style="background: #e7f3ff; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #004085;">
+                    ℹ️ The hosts are providing all food for this event
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Appetizers</h3>
+                <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                    <strong>Shrimp Cocktail</strong>
+                </div>
+                <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                    <strong>Cheese & Crackers Platter</strong>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Main Dishes</h3>
+                <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                    <strong>BBQ Ribs</strong>
+                </div>
+                <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                    <strong>Grilled Chicken</strong>
+                </div>
+                <div style="background: #d4edda; padding: 12px; border-radius: 8px; margin-bottom: 8px; border: 2px solid #00b894;">
+                    <strong>Vegetarian Pasta</strong>
+                    <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Matches your dietary preference</div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Sides</h3>
+                <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                    <strong>Coleslaw</strong>
+                </div>
+                <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                    <strong>Corn on the Cob</strong>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Desserts</h3>
+                <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                    <strong>Graduation Cake</strong>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Drinks</h3>
+                <div style="background: #f8f9fa; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+                    <strong>Sodas & Lemonade</strong>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                    <h4 style="margin-bottom: 8px;">Your Dietary Restrictions</h4>
+                    <p style="font-size: 14px; color: #856404; margin-bottom: 10px;">Vegetarian</p>
+                    <button class="btn btn-secondary">Update Restrictions</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 11b: Gift Registry View (Sarah's Graduation Party) -->
+        <div class="screen" id="attend-gift-registry">
+            <div class="header">
+                <h1>Gift Registry</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('attend-event-details')">← Back</button>
+                
+                <div style="background: #e7f3ff; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #004085;">
+                    🎁 Sarah has created a gift registry for her graduation
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab active">All Items (15)</button>
+                    <button class="tab">Purchased (3)</button>
+                    <button class="tab">Group Gifts (2)</button>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">For Her New Apartment</h3>
+                
+                <div class="potluck-item">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <strong>KitchenAid Stand Mixer</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Amazon • $379.99</div>
+                            <div style="font-size: 12px; color: #667eea; margin-top: 4px;">✨ High Priority</div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 8px 12px; font-size: 13px;">View</button>
+                    </div>
+                </div>
+                
+                <div class="potluck-item" style="opacity: 0.6;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <strong>Coffee Maker</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Target • $89.99</div>
+                            <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Purchased by Emily Chen</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="potluck-item">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <strong>Cookware Set (12-piece)</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Amazon • $199.99</div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 8px 12px; font-size: 13px;">View</button>
+                    </div>
+                </div>
+                
+                <div class="potluck-item">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <strong>Bath Towel Set</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Bed Bath & Beyond • $59.99</div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 8px 12px; font-size: 13px;">View</button>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">For Work & Career</h3>
+                
+                <div class="potluck-item">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <strong>Professional Laptop Bag</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Amazon • $79.99</div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 8px 12px; font-size: 13px;">View</button>
+                    </div>
+                </div>
+                
+                <div class="potluck-item" style="opacity: 0.6;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <strong>Desk Lamp</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Target • $39.99</div>
+                            <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Purchased by Michael Rodriguez</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">🤝 Group Gifts</h3>
+                <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Pool money with other guests for bigger items</p>
+                
+                <div class="potluck-item" style="border: 2px solid #667eea;">
+                    <div>
+                        <strong>Laptop for New Job</strong>
+                        <div style="font-size: 12px; color: #666; margin-top: 4px;">Apple MacBook Air • $1,199</div>
+                        <div style="margin-top: 10px; background: #f0f0f0; border-radius: 8px; height: 8px; overflow: hidden;">
+                            <div style="background: #667eea; width: 45%; height: 100%;"></div>
+                        </div>
+                        <div style="font-size: 12px; color: #666; margin-top: 6px;">$540 of $1,199 raised • 8 contributors</div>
+                        <button class="btn btn-primary" style="margin-top: 10px; padding: 8px;">Contribute to Group Gift</button>
+                    </div>
+                </div>
+                
+                <div class="potluck-item" style="border: 2px solid #667eea;">
+                    <div>
+                        <strong>Travel Fund for Europe Trip</strong>
+                        <div style="font-size: 12px; color: #666; margin-top: 4px;">Cash gift • Goal: $500</div>
+                        <div style="margin-top: 10px; background: #f0f0f0; border-radius: 8px; height: 8px; overflow: hidden;">
+                            <div style="background: #667eea; width: 72%; height: 100%;"></div>
+                        </div>
+                        <div style="font-size: 12px; color: #666; margin-top: 6px;">$360 of $500 raised • 12 contributors</div>
+                        <button class="btn btn-primary" style="margin-top: 10px; padding: 8px;">Contribute to Group Gift</button>
+                    </div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Gift Cards & Cash</h3>
+                
+                <div class="potluck-item">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <strong>Amazon Gift Card</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Any amount appreciated</div>
+                        </div>
+                        <button class="btn btn-secondary" style="padding: 8px 12px; font-size: 13px;">Send</button>
+                    </div>
+                </div>
+                
+                <div class="potluck-item" style="opacity: 0.6;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <strong>Venmo Cash Gift</strong>
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">@sarah-martinez</div>
+                            <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ You sent $50</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                    <h4 style="margin-bottom: 8px;">💡 Gift Giving Tips</h4>
+                    <p style="font-size: 13px; color: #856404; margin-bottom: 8px;">• Mark gifts as purchased so others don't duplicate</p>
+                    <p style="font-size: 13px; color: #856404; margin-bottom: 8px;">• Consider group gifts for bigger items</p>
+                    <p style="font-size: 13px; color: #856404;">• Ship directly to avoid bringing to party</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 12: Attendee Potluck View (Holiday Potluck) -->
+        <div class="screen" id="attend-potluck">
+            <div class="header">
+                <h1>Holiday Potluck - Potluck Board</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('attend-holiday-potluck')">← Back</button>
+                
+                <div style="background: #fff3cd; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #856404;">
+                    💡 Claim an item to let everyone know what you're bringing!
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab active">Potluck Items</button>
+                    <button class="tab">Last-Minute Needs</button>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Your Contribution</h3>
+                <div class="potluck-item claimed">
+                    <strong>Mac & Cheese</strong>
+                    <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ You're bringing this</div>
+                    <button class="btn btn-secondary" style="margin-top: 8px; padding: 8px;">Change or Remove</button>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Appetizers</h3>
+                <div class="potluck-item claimed">
+                    <strong>Chips & Salsa</strong>
+                    <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Claimed by Michael Rodriguez</div>
+                </div>
+                <div class="potluck-item claimed">
+                    <strong>Veggie Platter</strong>
+                    <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Claimed by Emily Chen</div>
+                </div>
+                <div class="potluck-item" onclick="claimItem(this)">
+                    <strong>Cheese & Crackers</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                <div class="potluck-item" onclick="claimItem(this)">
+                    <strong>Spinach Dip</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Main Dishes</h3>
+                <div class="potluck-item claimed">
+                    <strong>Honey Glazed Ham</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">✓ Provided by Host (Maria)</div>
+                </div>
+                <div class="potluck-item claimed">
+                    <strong>Mac & Cheese</strong>
+                    <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ You're bringing this</div>
+                </div>
+                <div class="potluck-item" onclick="claimItem(this)">
+                    <strong>Pasta Salad</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                <div class="potluck-item" onclick="claimItem(this)">
+                    <strong>Green Bean Casserole</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Sides</h3>
+                <div class="potluck-item claimed">
+                    <strong>Mashed Potatoes</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">✓ Provided by Host (Tom)</div>
+                </div>
+                <div class="potluck-item claimed">
+                    <strong>Dinner Rolls</strong>
+                    <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Claimed by Lisa Brown</div>
+                </div>
+                <div class="potluck-item" onclick="claimItem(this)">
+                    <strong>Cranberry Sauce</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Desserts</h3>
+                <div class="potluck-item claimed">
+                    <strong>Pumpkin Pie</strong>
+                    <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Claimed by Sarah Martinez</div>
+                </div>
+                <div class="potluck-item claimed">
+                    <strong>Chocolate Cake</strong>
+                    <div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ Claimed by Chris Lee</div>
+                </div>
+                <div class="potluck-item" onclick="claimItem(this)">
+                    <strong>Cookies</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                
+                <h3 style="margin: 15px 0 10px;">Drinks</h3>
+                <div class="potluck-item claimed">
+                    <strong>Eggnog</strong>
+                    <div style="font-size: 12px; color: #667eea; margin-top: 4px;">✓ Provided by Host (Maria)</div>
+                </div>
+                <div class="potluck-item" onclick="claimItem(this)">
+                    <strong>Sodas</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                <div class="potluck-item" onclick="claimItem(this)">
+                    <strong>Sparkling Cider</strong>
+                    <div style="font-size: 12px; color: #666; margin-top: 4px;">Available - Click to claim</div>
+                </div>
+                
+                <h3 style="margin: 25px 0 10px;">🚨 Last-Minute Needs</h3>
+                <div class="potluck-item" onclick="claimItem(this)" style="border: 2px solid #e17055;">
+                    <strong>Ice</strong>
+                    <div style="font-size: 12px; color: #e17055; margin-top: 4px;">⚠️ Needed! Click to claim</div>
+                </div>
+                <div class="potluck-item" onclick="claimItem(this)" style="border: 2px solid #e17055;">
+                    <strong>Paper Plates</strong>
+                    <div style="font-size: 12px; color: #e17055; margin-top: 4px;">⚠️ Needed! Click to claim</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 12: Past Events (NEW) -->
+        <div class="screen" id="past-events">
+            <div class="header">
+                <h1>Past Events</h1>
+                <p style="opacity: 0.9; font-size: 14px;">Relive the memories</p>
+                <div class="toggle-container">
+                    <div class="toggle">
+                        <button class="toggle-btn" onclick="switchMode('host')">Hosting</button>
+                        <button class="toggle-btn" onclick="switchMode('attend')">Attending</button>
+                        <button class="toggle-btn active" onclick="switchMode('past')">Past Events</button>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <h2 style="margin-bottom: 15px;">Event Recaps</h2>
+                
+                <div class="event-card" onclick="showScreen('past-event-detail')">
+                    <h3>Summer BBQ Bash</h3>
+                    <p>📅 August 12, 2025</p>
+                    <p>📍 Central Park Pavilion</p>
+                    <div style="margin-top: 10px; font-size: 13px; color: #667eea;">
+                        🎵 23 songs played • 📸 47 photos shared
+                    </div>
+                </div>
+                
+                <div class="event-card" onclick="showScreen('past-event-detail')">
+                    <h3>Jessica's Birthday Party</h3>
+                    <p>📅 July 4, 2025</p>
+                    <p>📍 Downtown Loft</p>
+                    <div style="margin-top: 10px; font-size: 13px; color: #667eea;">
+                        🎵 31 songs played • 📸 62 photos shared
+                    </div>
+                </div>
+                
+                <div class="event-card" onclick="showScreen('past-event-detail')">
+                    <h3>Spring Potluck</h3>
+                    <p>📅 May 15, 2025</p>
+                    <p>📍 Maria's House</p>
+                    <div style="margin-top: 10px; font-size: 13px; color: #667eea;">
+                        🎵 18 songs played • 📸 34 photos shared
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 13: Holiday Potluck Attendee Event Details -->
+        <div class="screen" id="attend-holiday-potluck">
+            <div class="header">
+                <h1>Holiday Potluck</h1>
+                <p style="opacity: 0.9; font-size: 14px;">Hosted by Maria, Tom & Others</p>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('attend-home')">← Back</button>
+                
+                <div style="background: #d4edda; padding: 12px; border-radius: 8px; margin-bottom: 20px; text-align: center; color: #155724;">
+                    ✓ You're attending this event
+                </div>
+                
+                <div class="section">
+                    <div class="detail-row">
+                        <span class="detail-label">Date & Time</span>
+                        <span class="detail-value">Dec 23, 2025 • 6:00 PM</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Location</span>
+                        <span class="detail-value">Maria's House</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Dress Code</span>
+                        <span class="detail-value">Festive Casual</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Parking</span>
+                        <span class="detail-value">Street parking available</span>
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary">📍 Get Directions</button>
+                <button class="btn btn-secondary">📅 Add to Calendar</button>
+                
+                <div class="section">
+                    <h3>Guest List (28 attending)</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 10px;">See who else is coming</p>
+                    <div style="background: #f8f9fa; padding: 12px; border-radius: 8px;">
+                        <div style="margin-bottom: 8px;">Jake Thompson, Emily Chen, Michael Rodriguez, Lisa Brown...</div>
+                        <button class="btn btn-secondary">View Full List</button>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Potluck Board 🍽️</h3>
+                    <p style="font-size: 14px; color: #667eea; margin-bottom: 10px;">This is a potluck event - bring a dish to share!</p>
+                    <div class="potluck-item claimed">
+                        <strong>Your Contribution: Mac & Cheese</strong>
+                        <button class="btn btn-secondary" style="margin-top: 8px; padding: 8px;">Change Item</button>
+                    </div>
+                    <button class="btn btn-secondary" onclick="showScreen('attend-potluck')">View All Potluck Items</button>
+                </div>
+                
+                <div class="section">
+                    <h3>Collaborative Music Playlist 🎵</h3>
+                    <p style="font-size: 14px; color: #00b894; margin-bottom: 10px;">✓ Host enabled song suggestions - add your favorites!</p>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 12px;">
+                        <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong>All I Want for Christmas</strong> - Mariah Carey
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Added by Maria (Host)</div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong>Jingle Bell Rock</strong> - Bobby Helms
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">Added by Tom (Host)</div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong>Last Christmas</strong> - Wham!
+                            <div style="font-size: 12px; color: #667eea; margin-top: 4px;">Added by You</div>
+                        </div>
+                        <p style="font-size: 13px; color: #999; text-align: center;">+ 18 more songs</p>
+                    </div>
+                    <button class="btn btn-secondary">+ Suggest a Song</button>
+                    <button class="btn btn-secondary">View Full Playlist</button>
+                </div>
+                
+                <button class="btn btn-primary">Message Hosts</button>
+                <button class="btn btn-secondary">Update RSVP</button>
+            </div>
+        </div>
+
+        <!-- Screen 15: Past Event Detail -->
+        <div class="screen" id="past-event-detail">
+            <div class="header">
+                <h1>Summer BBQ Bash</h1>
+                <p style="opacity: 0.9; font-size: 14px;">August 12, 2025</p>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('past-events')">← Back to Past Events</button>
+                
+                <div class="section">
+                    <h3>Music Recap 🎵</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 10px;">23 songs were played at this party</p>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 12px;">
+                        <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong>Good Days</strong> - SZA
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">
+                                <a href="#" style="color: #667eea; text-decoration: none;">Follow Artist</a> • 
+                                <a href="#" style="color: #667eea; text-decoration: none;">Add to My Playlist</a>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong>Levitating</strong> - Dua Lipa
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">
+                                <a href="#" style="color: #667eea; text-decoration: none;">Follow Artist</a> • 
+                                <a href="#" style="color: #667eea; text-decoration: none;">Add to My Playlist</a>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong>Heat Waves</strong> - Glass Animals
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">
+                                <a href="#" style="color: #667eea; text-decoration: none;">Follow Artist</a> • 
+                                <a href="#" style="color: #667eea; text-decoration: none;">Add to My Playlist</a>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #e0e0e0;">
+                            <strong>Blinding Lights</strong> - The Weeknd
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">
+                                <a href="#" style="color: #667eea; text-decoration: none;">Follow Artist</a> • 
+                                <a href="#" style="color: #667eea; text-decoration: none;">Add to My Playlist</a>
+                            </div>
+                        </div>
+                        <div>
+                            <strong>Save Your Tears</strong> - The Weeknd
+                            <div style="font-size: 12px; color: #666; margin-top: 4px;">
+                                <a href="#" style="color: #667eea; text-decoration: none;">Follow Artist</a> • 
+                                <a href="#" style="color: #667eea; text-decoration: none;">Add to My Playlist</a>
+                            </div>
+                        </div>
+                        <p style="font-size: 13px; color: #999; text-align: center; margin-top: 12px;">+ 18 more songs</p>
+                    </div>
+                    <button class="btn btn-secondary">🎵 Export Full Playlist to Spotify</button>
+                    <button class="btn btn-secondary">🎵 Export to Apple Music</button>
+                    <button class="btn btn-secondary">☁️ Export to SoundCloud</button>
+                </div>
+                
+                <div class="section">
+                    <h3>Photo Album 📸</h3>
+                    <p style="font-size: 14px; color: #666; margin-bottom: 10px;">47 photos from the party</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px;">
+                        <div style="aspect-ratio: 1; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px;"></div>
+                        <div style="aspect-ratio: 1; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 8px;"></div>
+                        <div style="aspect-ratio: 1; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 8px;"></div>
+                        <div style="aspect-ratio: 1; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); border-radius: 8px;"></div>
+                        <div style="aspect-ratio: 1; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 8px;"></div>
+                        <div style="aspect-ratio: 1; background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); border-radius: 8px;"></div>
+                    </div>
+                    <button class="btn btn-secondary">📸 View All Photos</button>
+                    <button class="btn btn-secondary">⬇️ Download Album</button>
+                    <button class="btn btn-secondary">📤 Share Album Link</button>
+                </div>
+                
+                <div class="section">
+                    <h3>Event Details</h3>
+                    <div class="detail-row">
+                        <span class="detail-label">Location</span>
+                        <span class="detail-value">Central Park Pavilion</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Attendees</span>
+                        <span class="detail-value">42 people</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label">Hosted By</span>
+                        <span class="detail-value">Sarah & Maria</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 14: Attendee Calendar -->
+        <div class="screen" id="attend-calendar">
+            <div class="header">
+                <h1>Your Event Calendar</h1>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('attend-home')">← Back</button>
+                
+                <h3 style="text-align: center; margin-bottom: 10px;">December 2025</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 20px;">
+                    <div style="text-align: center; font-size: 12px; color: #666; padding: 5px;">Sun</div>
+                    <div style="text-align: center; font-size: 12px; color: #666; padding: 5px;">Mon</div>
+                    <div style="text-align: center; font-size: 12px; color: #666; padding: 5px;">Tue</div>
+                    <div style="text-align: center; font-size: 12px; color: #666; padding: 5px;">Wed</div>
+                    <div style="text-align: center; font-size: 12px; color: #666; padding: 5px;">Thu</div>
+                    <div style="text-align: center; font-size: 12px; color: #666; padding: 5px;">Fri</div>
+                    <div style="text-align: center; font-size: 12px; color: #666; padding: 5px;">Sat</div>
+                </div>
+                
+                <div class="calendar-grid">
+                    <div class="calendar-day">1</div>
+                    <div class="calendar-day">2</div>
+                    <div class="calendar-day">3</div>
+                    <div class="calendar-day">4</div>
+                    <div class="calendar-day">5</div>
+                    <div class="calendar-day">6</div>
+                    <div class="calendar-day">7</div>
+                    <div class="calendar-day">8</div>
+                    <div class="calendar-day">9</div>
+                    <div class="calendar-day">10</div>
+                    <div class="calendar-day">11</div>
+                    <div class="calendar-day">12</div>
+                    <div class="calendar-day">13</div>
+                    <div class="calendar-day">14</div>
+                    <div class="calendar-day has-event" onclick="showScreen('attend-event-details')">15</div>
+                    <div class="calendar-day">16</div>
+                    <div class="calendar-day">17</div>
+                    <div class="calendar-day">18</div>
+                    <div class="calendar-day">19</div>
+                    <div class="calendar-day">20</div>
+                    <div class="calendar-day">21</div>
+                    <div class="calendar-day">22</div>
+                    <div class="calendar-day has-event">23</div>
+                    <div class="calendar-day">24</div>
+                    <div class="calendar-day">25</div>
+                    <div class="calendar-day">26</div>
+                    <div class="calendar-day">27</div>
+                    <div class="calendar-day">28</div>
+                    <div class="calendar-day">29</div>
+                    <div class="calendar-day">30</div>
+                    <div class="calendar-day has-event">31</div>
+                </div>
+                
+                <div style="margin-top: 25px;">
+                    <h3>Upcoming This Month</h3>
+                    <div class="event-card" onclick="showScreen('attend-event-details')">
+                        <h3>Sarah's Graduation Party</h3>
+                        <p>📅 December 15 • 4:00 PM</p>
+                    </div>
+                    <div class="event-card">
+                        <h3>Holiday Potluck</h3>
+                        <p>📅 December 23 • 6:00 PM</p>
+                    </div>
+                    <div class="event-card">
+                        <h3>New Year's Eve Bash</h3>
+                        <p>📅 December 31 • 9:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 13: Co-Host View -->
+        <div class="screen" id="event-details-cohost">
+            <div class="header">
+                <h1>Holiday Potluck</h1>
+                <p style="opacity: 0.9; font-size: 14px;">December 23, 2025 • 6:00 PM</p>
+            </div>
+            <div class="content">
+                <button class="back-btn" onclick="showScreen('home')">← Back to Events</button>
+                
+                <div style="background: #fff3cd; padding: 12px; border-radius: 8px; margin-bottom: 20px; color: #856404;">
+                    ℹ️ You're a Co-Host. Maria Garcia is the Communication Lead for this event.
+                </div>
+                
+                <div class="rsvp-stats">
+                    <div class="stat">
+                        <div class="stat-number">28</div>
+                        <div class="stat-label">Yes</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Maybe</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">No</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Host Team</h3>
+                    <div class="host-list">
+                        <div class="host-item">
+                            <div>
+                                <strong>Maria Garcia</strong> <span class="badge badge-comm">📣 Comm Lead</span>
+                                <div style="font-size: 12px; color: #666;">Primary Host</div>
+                            </div>
+                        </div>
+                        <div class="host-item">
+                            <div>
+                                <strong>You</strong>
+                                <div style="font-size: 12px; color: #666;">Co-Host</div>
+                            </div>
+                        </div>
+                        <div class="host-item">
+                            <div>
+                                <strong>Tom Williams</strong>
+                                <div style="font-size: 12px; color: #666;">Co-Host</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Recent Activity</h3>
+                    <div class="activity-item">
+                        <div class="activity-icon">✅</div>
+                        <div class="activity-content">
+                            <div class="activity-text">5 new RSVPs received</div>
+                            <div class="activity-time">1 hour ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">🍽️</div>
+                        <div class="activity-content">
+                            <div class="activity-text"><strong>Tom</strong> added "Mashed Potatoes" to menu</div>
+                            <div class="activity-time">3 hours ago</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>Quick Actions</h3>
+                    <button class="btn btn-secondary">👥 View Guest List (36)</button>
+                    <button class="btn btn-secondary" onclick="showScreen('potluck')">🍽️ View Potluck Board</button>
+                    <button class="btn btn-secondary">🎵 Music Playlist</button>
+                    <button class="btn btn-secondary">📍 Edit Location & Details</button>
+                </div>
+                
+                <div style="background: #e7f3ff; padding: 12px; border-radius: 8px; margin-top: 20px; color: #004085;">
+                    💬 Want to send updates? Draft your changes and Maria (Comm Lead) will review and send to guests.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function switchMode(mode) {
+            if (mode === 'host') {
+                showScreen('home');
+            } else if (mode === 'attend') {
+                showScreen('attend-home');
+            } else if (mode === 'past') {
+                showScreen('past-events');
+            }
+            
+            // Update toggle buttons AFTER the screen has changed
+            setTimeout(() => {
+                const currentScreen = document.querySelector('.screen.active');
+                const toggleBtns = currentScreen.querySelectorAll('.toggle-btn');
+                
+                // Remove active from all buttons
+                toggleBtns.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active to the correct button
+                if (mode === 'host') {
+                    toggleBtns[0].classList.add('active');
+                } else if (mode === 'attend') {
+                    toggleBtns[1].classList.add('active');
+                } else if (mode === 'past') {
+                    toggleBtns[2].classList.add('active');
+                }
+            }, 10);
+        }
+
+        function showTab(tabName) {
+            // This would switch between different tabs in the event details
+            console.log('Switching to tab:', tabName);
+        }
+
+        function claimItem(element) {
+            if (!element.classList.contains('claimed')) {
+                element.classList.add('claimed');
+                element.innerHTML = '<strong>' + element.querySelector('strong').textContent + '</strong><div style="font-size: 12px; color: #00b894; margin-top: 4px;">✓ You claimed this item!</div>';
+            }
+        }
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Go back to previous screen (simplified version)
+                const currentScreen = document.querySelector('.screen.active').id;
+                if (currentScreen !== 'home' && currentScreen !== 'attend-home') {
+                    const backBtn = document.querySelector('.screen.active .back-btn');
+                    if (backBtn) backBtn.click();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
