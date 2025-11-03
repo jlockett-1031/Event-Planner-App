@@ -114,7 +114,7 @@ export default function MusicDashboard({ onBack }: MusicDashboardProps) {
             <div>
               <h2 className="text-xl font-bold mb-4">Current Playlist (23 songs)</h2>
 
-              <div className="space-y-3 mb-4">
+              <div className="space-y-3">
                 {currentPlaylist.map((song) => (
                   <div
                     key={song.id}
@@ -126,14 +126,6 @@ export default function MusicDashboard({ onBack }: MusicDashboardProps) {
                   </div>
                 ))}
               </div>
-
-              <Button 
-                variant="secondary" 
-                className="w-full"
-                data-testid="button-export-spotify"
-              >
-                Export to Spotify
-              </Button>
             </div>
 
             {/* Music Service Connections */}
