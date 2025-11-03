@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, MapPin, Calendar, Clock, Music, UtensilsCrossed, Info, Plus, ExternalLink } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, Clock, Music, UtensilsCrossed, Info, Plus, ExternalLink, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -55,6 +55,80 @@ function PotluckItemClaim({ name, claimedBy }: { name: string; claimedBy: string
             Claim
           </Button>
         ) : null}
+      </div>
+    </div>
+  );
+}
+
+// Component for registry items that can be purchased
+function RegistryItem({ name, store, price, purchasedBy, link }: { 
+  name: string; 
+  store: string; 
+  price: string; 
+  purchasedBy: string;
+  link?: string;
+}) {
+  const [purchased, setPurchased] = useState(purchasedBy !== "Available");
+  const [purchaser, setPurchaser] = useState(purchasedBy);
+
+  const handlePurchase = () => {
+    setPurchased(true);
+    setPurchaser("You");
+  };
+
+  const handleUnpurchase = () => {
+    setPurchased(false);
+    setPurchaser("Available");
+  };
+
+  return (
+    <div className="bg-card rounded-lg p-4 border border-card-border">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1">
+          <div className="font-semibold text-base mb-1">{name}</div>
+          <div className="text-sm text-muted-foreground mb-2">{store} • {price}</div>
+          {purchased ? (
+            <Badge variant="secondary" className="text-xs">
+              {purchaser === "You" ? "Purchased by You" : `Purchased by ${purchaser}`}
+            </Badge>
+          ) : (
+            <Badge variant="outline" className="text-xs">
+              Available
+            </Badge>
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          {link && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
+              data-testid={`button-view-${name.toLowerCase().replace(/\s+/g, '-')}`}
+            >
+              <ExternalLink className="w-3 h-3 mr-1" />
+              View
+            </Button>
+          )}
+          {purchased && purchaser === "You" ? (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={handleUnpurchase}
+              data-testid={`button-unmark-${name.toLowerCase().replace(/\s+/g, '-')}`}
+            >
+              Unmark
+            </Button>
+          ) : !purchased ? (
+            <Button
+              variant="default"
+              size="sm"
+              onClick={handlePurchase}
+              data-testid={`button-purchase-${name.toLowerCase().replace(/\s+/g, '-')}`}
+            >
+              Mark as Purchased
+            </Button>
+          ) : null}
+        </div>
       </div>
     </div>
   );
@@ -358,6 +432,68 @@ export default function EventDetailsGuest({ eventId, onBack }: EventDetailsGuest
                   </div>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Gift Registry - Only for Mike's Birthday Party */}
+          {!isNewYearsEve && (
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Gift className="w-5 h-5 text-primary" />
+                <h2 className="text-2xl font-bold">Gift Registry</h2>
+              </div>
+
+              <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4 flex gap-3 mb-4">
+                <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-blue-900 dark:text-blue-100">
+                  Help make this birthday special! Choose a gift from the registry and mark it as purchased once you buy it.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <RegistryItem
+                  name="Wireless Noise-Canceling Headphones"
+                  store="Amazon"
+                  price="$299.99"
+                  purchasedBy="Available"
+                  link="https://www.amazon.com"
+                />
+                <RegistryItem
+                  name="Espresso Machine"
+                  store="Target"
+                  price="$199.99"
+                  purchasedBy="Jennifer L."
+                  link="https://www.target.com"
+                />
+                <RegistryItem
+                  name="Portable Bluetooth Speaker"
+                  store="Best Buy"
+                  price="$149.99"
+                  purchasedBy="Available"
+                  link="https://www.bestbuy.com"
+                />
+                <RegistryItem
+                  name="Professional Chef's Knife Set"
+                  store="Williams Sonoma"
+                  price="$179.99"
+                  purchasedBy="Available"
+                  link="https://www.williams-sonoma.com"
+                />
+                <RegistryItem
+                  name="Smart Watch"
+                  store="Amazon"
+                  price="$249.99"
+                  purchasedBy="Available"
+                  link="https://www.amazon.com"
+                />
+                <RegistryItem
+                  name="Leather Messenger Bag"
+                  store="Nordstrom"
+                  price="$189.99"
+                  purchasedBy="Available"
+                  link="https://www.nordstrom.com"
+                />
+              </div>
             </div>
           )}
 
