@@ -18,12 +18,13 @@ import PhotoAlbum from "@/pages/PhotoAlbum";
 import LocationDetails from "@/pages/LocationDetails";
 import ManageHostTeam from "@/pages/ManageHostTeam";
 import EventCalendar from "@/pages/EventCalendar";
+import PastEventDetailsGuest from "@/pages/PastEventDetailsGuest";
 import NotFound from "@/pages/not-found";
 
 type ViewMode = "hosting" | "attending" | "past";
 
 function Router() {
-  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "details-potluck" | "details-guest" | "host-activity" | "guest-list" | "drink-calculator" | "gift-registry" | "music-dashboard" | "photo-album" | "location-details" | "manage-host-team" | "calendar">("dashboard");
+  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "details-potluck" | "details-guest" | "host-activity" | "guest-list" | "drink-calculator" | "gift-registry" | "music-dashboard" | "photo-album" | "location-details" | "manage-host-team" | "calendar" | "past-event-guest">("dashboard");
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [parentEventView, setParentEventView] = useState<"details" | "details-potluck">("details");
   const [dashboardViewMode, setDashboardViewMode] = useState<ViewMode>("hosting");
@@ -39,8 +40,12 @@ function Router() {
             onViewCalendar={() => setCurrentView("calendar")}
             onEventClick={(eventId) => {
               setSelectedEventId(eventId);
+              // Route to past event guest view for past events (IDs "7" and "8")
+              if (eventId === "7" || eventId === "8") {
+                setCurrentView("past-event-guest");
+              }
               // Route to guest view for attending events (IDs "3", "4", and "6")
-              if (eventId === "3" || eventId === "4" || eventId === "6") {
+              else if (eventId === "3" || eventId === "4" || eventId === "6") {
                 setCurrentView("details-guest");
               }
               // Route to potluck page for Holiday Potluck event (ID "2")
@@ -133,6 +138,12 @@ function Router() {
         )}
         {currentView === "details-guest" && selectedEventId && (
           <EventDetailsGuest
+            eventId={selectedEventId}
+            onBack={() => setCurrentView("dashboard")}
+          />
+        )}
+        {currentView === "past-event-guest" && selectedEventId && (
+          <PastEventDetailsGuest
             eventId={selectedEventId}
             onBack={() => setCurrentView("dashboard")}
           />

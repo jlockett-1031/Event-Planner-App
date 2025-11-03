@@ -57,12 +57,20 @@ const mockAttendingEvents: Event[] = [
 
 const mockPastEvents: Event[] = [
   {
-    id: "5",
-    name: "Thanksgiving Dinner",
-    date: "November 28, 2024",
-    time: "5:00 PM",
-    location: "123 Oak Street",
-    role: "primary-host",
+    id: "7",
+    name: "Summer BBQ Bash",
+    date: "August 12, 2025",
+    time: "2:00 PM",
+    location: "Central Park Pavilion",
+    role: "attending",
+  },
+  {
+    id: "8",
+    name: "Spring Garden Party",
+    date: "May 20, 2025",
+    time: "3:00 PM",
+    location: "Rose Garden Estate",
+    role: "attending",
   },
 ];
 
