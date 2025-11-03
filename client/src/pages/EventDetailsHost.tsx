@@ -13,6 +13,7 @@ interface EventDetailsHostProps {
   onGiftRegistry?: () => void;
   onMusicPlaylist?: () => void;
   onHostActivity?: () => void;
+  onPhotoAlbum?: () => void;
 }
 
 export default function EventDetailsHost({
@@ -23,6 +24,7 @@ export default function EventDetailsHost({
   onGiftRegistry,
   onMusicPlaylist,
   onHostActivity,
+  onPhotoAlbum,
 }: EventDetailsHostProps) {
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -164,6 +166,7 @@ export default function EventDetailsHost({
                 <Button
                   variant="secondary"
                   className="w-full justify-start"
+                  onClick={onPhotoAlbum}
                   data-testid="button-photo-album"
                 >
                   <Camera className="w-4 h-4 mr-2" />
