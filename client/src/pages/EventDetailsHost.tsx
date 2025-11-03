@@ -82,7 +82,7 @@ export default function EventDetailsHost({
               Guests
             </TabsTrigger>
             <TabsTrigger value="potluck" data-testid="tab-potluck">
-              Menu
+              Food and Beverage Menu
             </TabsTrigger>
             <TabsTrigger value="more" data-testid="tab-more">
               More
@@ -310,32 +310,47 @@ export default function EventDetailsHost({
               </div>
 
               {/* Appetizers */}
-              <MenuSection title="Appetizers">
+              <MenuSection 
+                title="Appetizers"
+                onEdit={() => console.log("Edit Appetizers")}
+              >
                 <MenuItem name="Shrimp Cocktail" provider="Host Provided" />
                 <MenuItem name="Cheese & Crackers Platter" provider="Host Provided" />
               </MenuSection>
 
               {/* Main Dishes */}
-              <MenuSection title="Main Dishes">
+              <MenuSection 
+                title="Main Dishes"
+                onEdit={() => console.log("Edit Main Dishes")}
+              >
                 <MenuItem name="BBQ Ribs" provider="Host Provided" />
                 <MenuItem name="Grilled Chicken" provider="Host Provided" />
                 <MenuItem name="Vegetarian Pasta" provider="Host Provided - Vegetarian" />
               </MenuSection>
 
               {/* Sides */}
-              <MenuSection title="Sides">
+              <MenuSection 
+                title="Sides"
+                onEdit={() => console.log("Edit Sides")}
+              >
                 <MenuItem name="Coleslaw" provider="Host Provided" />
                 <MenuItem name="Corn on the Cob" provider="Host Provided" />
               </MenuSection>
 
               {/* Desserts */}
-              <MenuSection title="Desserts">
+              <MenuSection 
+                title="Desserts"
+                onEdit={() => console.log("Edit Desserts")}
+              >
                 <MenuItem name="Graduation Cake" provider="Host Provided" />
                 <MenuItem name="Cookies" provider="Host Provided" />
               </MenuSection>
 
               {/* Drinks */}
-              <MenuSection title="Drinks">
+              <MenuSection 
+                title="Drinks"
+                onEdit={() => console.log("Edit Drinks")}
+              >
                 <div className="space-y-3">
                   {/* Drink Calculator Button */}
                   <div className="bg-card rounded-lg p-4 border border-card-border">
@@ -400,7 +415,15 @@ export default function EventDetailsHost({
 }
 
 // Helper component for collapsible menu sections
-function MenuSection({ title, children }: { title: string; children: React.ReactNode }) {
+function MenuSection({ 
+  title, 
+  children,
+  onEdit
+}: { 
+  title: string; 
+  children: React.ReactNode;
+  onEdit?: () => void;
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -419,7 +442,20 @@ function MenuSection({ title, children }: { title: string; children: React.React
         </button>
       </CollapsibleTrigger>
       <CollapsibleContent className="mt-3">
-        <div className="space-y-3">{children}</div>
+        <div className="space-y-3">
+          {onEdit && (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={onEdit}
+              className="w-full"
+              data-testid={`button-edit-${title.toLowerCase().replace(/\s/g, '-')}`}
+            >
+              Edit {title}
+            </Button>
+          )}
+          {children}
+        </div>
       </CollapsibleContent>
     </Collapsible>
   );
