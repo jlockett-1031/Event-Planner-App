@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, MapPin, Calendar, Clock, Music, UtensilsCrossed, Info, Plus } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, Clock, Music, UtensilsCrossed, Info, Plus, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -166,16 +166,34 @@ export default function EventDetailsGuest({ eventId, onBack }: EventDetailsGuest
               <div className="flex items-center gap-2">
                 <Badge variant="secondary">{eventData.type}</Badge>
               </div>
+            </div>
+          </div>
 
-              <div className="pt-2 border-t border-border">
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <div className="font-semibold">{eventData.location}</div>
-                    <div className="text-sm text-muted-foreground">{eventData.address}</div>
-                  </div>
-                </div>
+          {/* Location & Details Card */}
+          <div className="bg-card rounded-xl p-6 border border-card-border">
+            <div className="flex items-center gap-2 mb-4">
+              <MapPin className="w-5 h-5 text-primary" />
+              <h2 className="text-xl font-bold">Location & Details</h2>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <div className="font-semibold text-lg mb-1">{eventData.location}</div>
+                <div className="text-muted-foreground">{eventData.address}</div>
               </div>
+
+              <Button
+                variant="default"
+                className="w-full"
+                onClick={() => {
+                  const encodedAddress = encodeURIComponent(`${eventData.location}, ${eventData.address}`);
+                  window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank', 'noopener,noreferrer');
+                }}
+                data-testid="button-open-maps"
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Open in Google Maps
+              </Button>
             </div>
           </div>
 
