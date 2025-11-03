@@ -77,7 +77,7 @@ export default function EventDetailsHost({
               Guests
             </TabsTrigger>
             <TabsTrigger value="potluck" data-testid="tab-potluck">
-              Potluck
+              Menu
             </TabsTrigger>
             <TabsTrigger value="more" data-testid="tab-more">
               More
