@@ -9,10 +9,11 @@ import EventForm from "@/components/EventForm";
 import EventDetailsHost from "@/pages/EventDetailsHost";
 import HostActivityFeed from "@/pages/HostActivityFeed";
 import GuestList from "@/pages/GuestList";
+import DrinkCalculator from "@/pages/DrinkCalculator";
 import NotFound from "@/pages/not-found";
 
 function Router() {
-  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "host-activity" | "guest-list">("dashboard");
+  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "host-activity" | "guest-list" | "drink-calculator">("dashboard");
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   return (
@@ -48,7 +49,7 @@ function Router() {
             onBack={() => setCurrentView("dashboard")}
             onManageGuests={() => setCurrentView("guest-list")}
             onManagePotluck={() => console.log("Manage Potluck")}
-            onDrinkCalculator={() => console.log("Drink Calculator")}
+            onDrinkCalculator={() => setCurrentView("drink-calculator")}
             onGiftRegistry={() => console.log("Gift Registry")}
             onMusicPlaylist={() => console.log("Music Playlist")}
             onHostActivity={() => setCurrentView("host-activity")}
@@ -59,6 +60,13 @@ function Router() {
         )}
         {currentView === "guest-list" && (
           <GuestList onBack={() => setCurrentView("details")} />
+        )}
+        {currentView === "drink-calculator" && (
+          <DrinkCalculator 
+            onBack={() => setCurrentView("details")} 
+            onCalculate={() => console.log("Calculate")}
+            onAdvancedOptions={() => console.log("Advanced Options")}
+          />
         )}
       </Route>
       <Route component={NotFound} />
