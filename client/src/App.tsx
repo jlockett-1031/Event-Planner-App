@@ -7,10 +7,11 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Dashboard from "@/pages/Dashboard";
 import EventForm from "@/components/EventForm";
 import EventDetailsHost from "@/pages/EventDetailsHost";
+import HostActivityFeed from "@/pages/HostActivityFeed";
 import NotFound from "@/pages/not-found";
 
 function Router() {
-  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details">("dashboard");
+  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "host-activity">("dashboard");
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   return (
@@ -49,8 +50,11 @@ function Router() {
             onDrinkCalculator={() => console.log("Drink Calculator")}
             onGiftRegistry={() => console.log("Gift Registry")}
             onMusicPlaylist={() => console.log("Music Playlist")}
-            onHostActivity={() => console.log("Host Activity")}
+            onHostActivity={() => setCurrentView("host-activity")}
           />
+        )}
+        {currentView === "host-activity" && (
+          <HostActivityFeed onBack={() => setCurrentView("details")} />
         )}
       </Route>
       <Route component={NotFound} />
