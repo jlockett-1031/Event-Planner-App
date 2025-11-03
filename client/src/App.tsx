@@ -15,10 +15,11 @@ import GiftRegistry from "@/pages/GiftRegistry";
 import MusicDashboard from "@/pages/MusicDashboard";
 import PhotoAlbum from "@/pages/PhotoAlbum";
 import LocationDetails from "@/pages/LocationDetails";
+import ManageHostTeam from "@/pages/ManageHostTeam";
 import NotFound from "@/pages/not-found";
 
 function Router() {
-  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "details-potluck" | "host-activity" | "guest-list" | "drink-calculator" | "gift-registry" | "music-dashboard" | "photo-album" | "location-details">("dashboard");
+  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "details-potluck" | "host-activity" | "guest-list" | "drink-calculator" | "gift-registry" | "music-dashboard" | "photo-album" | "location-details" | "manage-host-team">("dashboard");
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [parentEventView, setParentEventView] = useState<"details" | "details-potluck">("details");
 
@@ -68,6 +69,7 @@ function Router() {
             onHostActivity={() => setCurrentView("host-activity")}
             onPhotoAlbum={() => setCurrentView("photo-album")}
             onLocationDetails={() => setCurrentView("location-details")}
+            onManageHostTeam={() => setCurrentView("manage-host-team")}
           />
         )}
         {currentView === "details-potluck" && (
@@ -107,6 +109,9 @@ function Router() {
         )}
         {currentView === "location-details" && (
           <LocationDetails onBack={() => setCurrentView(parentEventView)} />
+        )}
+        {currentView === "manage-host-team" && (
+          <ManageHostTeam onBack={() => setCurrentView(parentEventView)} />
         )}
       </Route>
       <Route component={NotFound} />

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, UtensilsCrossed, Wine, Gift, Music, Camera, MapPin, Check, ChevronDown, ChevronUp, Info, ClipboardList, Megaphone } from "lucide-react";
+import { ArrowLeft, UtensilsCrossed, Wine, Gift, Music, Camera, MapPin, Check, ChevronDown, ChevronUp, Info, ClipboardList, Megaphone, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,7 @@ interface EventDetailsHostProps {
   onHostActivity?: () => void;
   onPhotoAlbum?: () => void;
   onLocationDetails?: () => void;
+  onManageHostTeam?: () => void;
 }
 
 export default function EventDetailsHost({
@@ -27,6 +28,7 @@ export default function EventDetailsHost({
   onHostActivity,
   onPhotoAlbum,
   onLocationDetails,
+  onManageHostTeam,
 }: EventDetailsHostProps) {
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -133,10 +135,11 @@ export default function EventDetailsHost({
                 <Button
                   variant="secondary"
                   className="w-full justify-start"
-                  data-testid="button-manage-menu"
+                  onClick={onManageHostTeam}
+                  data-testid="button-manage-host-team"
                 >
-                  <UtensilsCrossed className="w-4 h-4 mr-2" />
-                  Manage Food Menu
+                  <Users className="w-4 h-4 mr-2" />
+                  Manage Host Team
                 </Button>
                 <Button
                   variant="secondary"
