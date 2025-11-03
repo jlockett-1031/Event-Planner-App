@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Music, Play, SkipForward, Clock, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 
 interface MusicDashboardProps {
   onBack?: () => void;
@@ -156,15 +157,208 @@ export default function MusicDashboard({ onBack }: MusicDashboardProps) {
             </div>
           </TabsContent>
 
-          <TabsContent value="live-tracking" className="mt-6">
-            <div className="bg-card rounded-xl p-6 text-center">
-              <p className="text-muted-foreground">Live tracking features will appear here during the event</p>
+          <TabsContent value="live-tracking" className="mt-6 space-y-6">
+            {/* Now Playing */}
+            <div className="bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl p-6 border border-primary/20" data-testid="now-playing-section">
+              <div className="flex items-center gap-2 mb-4">
+                <Play className="w-5 h-5 text-primary" />
+                <h3 className="text-lg font-semibold">Now Playing</h3>
+              </div>
+              
+              <div className="flex items-center gap-6">
+                <div className="w-24 h-24 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Music className="w-12 h-12 text-primary" />
+                </div>
+                
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-2xl font-bold truncate" data-testid="text-now-playing-title">Levitating</h2>
+                  <p className="text-lg text-muted-foreground" data-testid="text-now-playing-artist">Dua Lipa</p>
+                  
+                  <div className="mt-4 space-y-2">
+                    <Progress value={65} className="h-2" data-testid="progress-now-playing" />
+                    <div className="flex justify-between text-sm text-muted-foreground">
+                      <span data-testid="text-current-time">2:15</span>
+                      <span data-testid="text-total-time">3:28</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Event Stats */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-card rounded-lg p-4 border border-card-border text-center">
+                <div className="text-3xl font-bold text-primary" data-testid="stat-songs-played">12</div>
+                <div className="text-sm text-muted-foreground mt-1">Songs Played</div>
+              </div>
+              <div className="bg-card rounded-lg p-4 border border-card-border text-center">
+                <div className="text-3xl font-bold text-primary" data-testid="stat-time-elapsed">2h 15m</div>
+                <div className="text-sm text-muted-foreground mt-1">Time Elapsed</div>
+              </div>
+            </div>
+
+            {/* Up Next */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <SkipForward className="w-5 h-5" />
+                <h3 className="text-lg font-semibold">Up Next</h3>
+              </div>
+              
+              <div className="space-y-3">
+                <div className="bg-card rounded-lg p-4 border border-card-border flex items-center gap-4" data-testid="queue-item-1">
+                  <div className="w-12 h-12 bg-muted rounded flex items-center justify-center flex-shrink-0">
+                    <Music className="w-6 h-6 text-muted-foreground" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold truncate">Good Days</div>
+                    <div className="text-sm text-muted-foreground">SZA</div>
+                  </div>
+                  <div className="text-sm text-muted-foreground">4:39</div>
+                </div>
+
+                <div className="bg-card rounded-lg p-4 border border-card-border flex items-center gap-4" data-testid="queue-item-2">
+                  <div className="w-12 h-12 bg-muted rounded flex items-center justify-center flex-shrink-0">
+                    <Music className="w-6 h-6 text-muted-foreground" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold truncate">Heat Waves</div>
+                    <div className="text-sm text-muted-foreground">Glass Animals</div>
+                  </div>
+                  <div className="text-sm text-muted-foreground">3:58</div>
+                </div>
+
+                <div className="bg-card rounded-lg p-4 border border-card-border flex items-center gap-4" data-testid="queue-item-3">
+                  <div className="w-12 h-12 bg-muted rounded flex items-center justify-center flex-shrink-0">
+                    <Music className="w-6 h-6 text-muted-foreground" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold truncate">Blinding Lights</div>
+                    <div className="text-sm text-muted-foreground">The Weeknd</div>
+                  </div>
+                  <div className="text-sm text-muted-foreground">3:20</div>
+                </div>
+              </div>
             </div>
           </TabsContent>
 
-          <TabsContent value="recap" className="mt-6">
-            <div className="bg-card rounded-xl p-6 text-center">
-              <p className="text-muted-foreground">Event recap and analytics will appear here after the event</p>
+          <TabsContent value="recap" className="mt-6 space-y-6">
+            {/* Summary Stats */}
+            <div className="grid grid-cols-3 gap-4">
+              <div className="bg-card rounded-lg p-4 border border-card-border text-center">
+                <div className="text-3xl font-bold text-primary" data-testid="recap-stat-total-songs">23</div>
+                <div className="text-sm text-muted-foreground mt-1">Total Songs</div>
+              </div>
+              <div className="bg-card rounded-lg p-4 border border-card-border text-center">
+                <div className="text-3xl font-bold text-primary" data-testid="recap-stat-total-duration">4h 32m</div>
+                <div className="text-sm text-muted-foreground mt-1">Total Duration</div>
+              </div>
+              <div className="bg-card rounded-lg p-4 border border-card-border text-center">
+                <div className="text-3xl font-bold text-primary" data-testid="recap-stat-total-artists">18</div>
+                <div className="text-sm text-muted-foreground mt-1">Artists</div>
+              </div>
+            </div>
+
+            {/* Top Songs */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <TrendingUp className="w-5 h-5" />
+                <h3 className="text-lg font-semibold">Top Songs</h3>
+              </div>
+              
+              <div className="space-y-3">
+                <div className="bg-card rounded-lg p-4 border border-card-border flex items-center gap-4" data-testid="top-song-1">
+                  <div className="text-2xl font-bold text-primary w-8 text-center flex-shrink-0">1</div>
+                  <div className="w-12 h-12 bg-primary/10 rounded flex items-center justify-center flex-shrink-0">
+                    <Music className="w-6 h-6 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold truncate">Levitating</div>
+                    <div className="text-sm text-muted-foreground">Dua Lipa</div>
+                  </div>
+                  <div className="text-sm text-muted-foreground">Played 3 times</div>
+                </div>
+
+                <div className="bg-card rounded-lg p-4 border border-card-border flex items-center gap-4" data-testid="top-song-2">
+                  <div className="text-2xl font-bold text-primary w-8 text-center flex-shrink-0">2</div>
+                  <div className="w-12 h-12 bg-primary/10 rounded flex items-center justify-center flex-shrink-0">
+                    <Music className="w-6 h-6 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold truncate">Good Days</div>
+                    <div className="text-sm text-muted-foreground">SZA</div>
+                  </div>
+                  <div className="text-sm text-muted-foreground">Played 2 times</div>
+                </div>
+
+                <div className="bg-card rounded-lg p-4 border border-card-border flex items-center gap-4" data-testid="top-song-3">
+                  <div className="text-2xl font-bold text-primary w-8 text-center flex-shrink-0">3</div>
+                  <div className="w-12 h-12 bg-primary/10 rounded flex items-center justify-center flex-shrink-0">
+                    <Music className="w-6 h-6 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold truncate">Heat Waves</div>
+                    <div className="text-sm text-muted-foreground">Glass Animals</div>
+                  </div>
+                  <div className="text-sm text-muted-foreground">Played 2 times</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Full Playback History */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Clock className="w-5 h-5" />
+                <h3 className="text-lg font-semibold">Playback History</h3>
+              </div>
+              
+              <div className="space-y-2">
+                <div className="bg-card rounded-lg p-3 border border-card-border flex items-center gap-3" data-testid="history-entry-1">
+                  <div className="text-sm text-muted-foreground w-16 flex-shrink-0">11:45 PM</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-sm truncate">Blinding Lights</div>
+                    <div className="text-xs text-muted-foreground">The Weeknd</div>
+                  </div>
+                </div>
+
+                <div className="bg-card rounded-lg p-3 border border-card-border flex items-center gap-3" data-testid="history-entry-2">
+                  <div className="text-sm text-muted-foreground w-16 flex-shrink-0">11:42 PM</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-sm truncate">Levitating</div>
+                    <div className="text-xs text-muted-foreground">Dua Lipa</div>
+                  </div>
+                </div>
+
+                <div className="bg-card rounded-lg p-3 border border-card-border flex items-center gap-3" data-testid="history-entry-3">
+                  <div className="text-sm text-muted-foreground w-16 flex-shrink-0">11:38 PM</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-sm truncate">Good Days</div>
+                    <div className="text-xs text-muted-foreground">SZA</div>
+                  </div>
+                </div>
+
+                <div className="bg-card rounded-lg p-3 border border-card-border flex items-center gap-3" data-testid="history-entry-4">
+                  <div className="text-sm text-muted-foreground w-16 flex-shrink-0">11:34 PM</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-sm truncate">Heat Waves</div>
+                    <div className="text-xs text-muted-foreground">Glass Animals</div>
+                  </div>
+                </div>
+
+                <div className="bg-card rounded-lg p-3 border border-card-border flex items-center gap-3" data-testid="history-entry-5">
+                  <div className="text-sm text-muted-foreground w-16 flex-shrink-0">11:30 PM</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-sm truncate">As It Was</div>
+                    <div className="text-xs text-muted-foreground">Harry Styles</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Download Actions */}
+            <div className="pt-4 border-t border-border">
+              <Button variant="secondary" className="w-full" data-testid="button-download-recap">
+                Download Event Recap
+              </Button>
             </div>
           </TabsContent>
         </Tabs>
