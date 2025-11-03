@@ -135,6 +135,33 @@ export default function MusicDashboard({ onBack }: MusicDashboardProps) {
                 Export to Spotify
               </Button>
             </div>
+
+            {/* Music Service Connections */}
+            <div className="pt-6 border-t border-border">
+              <div className="grid grid-cols-1 gap-3">
+                <Button 
+                  variant="secondary" 
+                  className="w-full"
+                  data-testid="button-connect-apple-music"
+                >
+                  Connect to Apple Music
+                </Button>
+                <Button 
+                  variant="secondary" 
+                  className="w-full"
+                  data-testid="button-connect-spotify"
+                >
+                  Connect to Spotify
+                </Button>
+                <Button 
+                  variant="secondary" 
+                  className="w-full"
+                  data-testid="button-connect-soundcloud"
+                >
+                  Connect to SoundCloud
+                </Button>
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="live-tracking" className="mt-6">
