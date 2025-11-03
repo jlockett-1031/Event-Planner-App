@@ -401,14 +401,14 @@ function MenuSection({ title, children }: { title: string; children: React.React
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <CollapsibleTrigger asChild>
         <button
-          className="w-full flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border hover-elevate"
+          className="w-full flex items-center justify-between p-4 bg-primary/10 dark:bg-primary/20 rounded-lg border border-primary/20 hover-elevate"
           data-testid={`section-${title.toLowerCase().replace(/\s/g, '-')}`}
         >
-          <span className="font-semibold text-lg">{title}</span>
+          <span className="font-semibold text-lg text-primary">{title}</span>
           {isOpen ? (
-            <ChevronUp className="w-5 h-5 text-muted-foreground" />
+            <ChevronUp className="w-5 h-5 text-primary" />
           ) : (
-            <ChevronDown className="w-5 h-5 text-muted-foreground" />
+            <ChevronDown className="w-5 h-5 text-primary" />
           )}
         </button>
       </CollapsibleTrigger>
