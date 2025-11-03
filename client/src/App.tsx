@@ -19,12 +19,17 @@ import LocationDetails from "@/pages/LocationDetails";
 import ManageHostTeam from "@/pages/ManageHostTeam";
 import EventCalendar from "@/pages/EventCalendar";
 import PastEventDetailsGuest from "@/pages/PastEventDetailsGuest";
+import EventSettings from "@/pages/EventSettings";
+import CommunicationTools from "@/pages/CommunicationTools";
+import EventManagement from "@/pages/EventManagement";
+import AnalyticsReports from "@/pages/AnalyticsReports";
+import AdvancedFeatures from "@/pages/AdvancedFeatures";
 import NotFound from "@/pages/not-found";
 
 type ViewMode = "hosting" | "attending" | "past";
 
 function Router() {
-  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "details-potluck" | "details-guest" | "host-activity" | "guest-list" | "drink-calculator" | "gift-registry" | "music-dashboard" | "photo-album" | "location-details" | "manage-host-team" | "calendar" | "past-event-guest">("dashboard");
+  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "details-potluck" | "details-guest" | "host-activity" | "guest-list" | "drink-calculator" | "gift-registry" | "music-dashboard" | "photo-album" | "location-details" | "manage-host-team" | "calendar" | "past-event-guest" | "event-settings" | "communication-tools" | "event-management" | "analytics-reports" | "advanced-features">("dashboard");
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [parentEventView, setParentEventView] = useState<"details" | "details-potluck">("details");
   const [dashboardViewMode, setDashboardViewMode] = useState<ViewMode>("hosting");
@@ -89,6 +94,11 @@ function Router() {
             onPhotoAlbum={() => setCurrentView("photo-album")}
             onLocationDetails={() => setCurrentView("location-details")}
             onManageHostTeam={() => setCurrentView("manage-host-team")}
+            onEventSettings={() => setCurrentView("event-settings")}
+            onCommunicationTools={() => setCurrentView("communication-tools")}
+            onEventManagement={() => setCurrentView("event-management")}
+            onAnalyticsReports={() => setCurrentView("analytics-reports")}
+            onAdvancedFeatures={() => setCurrentView("advanced-features")}
           />
         )}
         {currentView === "details-potluck" && (
@@ -103,6 +113,11 @@ function Router() {
             onPhotoAlbum={() => setCurrentView("photo-album")}
             onLocationDetails={() => setCurrentView("location-details")}
             onManageHostTeam={() => setCurrentView("manage-host-team")}
+            onEventSettings={() => setCurrentView("event-settings")}
+            onCommunicationTools={() => setCurrentView("communication-tools")}
+            onEventManagement={() => setCurrentView("event-management")}
+            onAnalyticsReports={() => setCurrentView("analytics-reports")}
+            onAdvancedFeatures={() => setCurrentView("advanced-features")}
           />
         )}
         {currentView === "host-activity" && (
@@ -147,6 +162,21 @@ function Router() {
             eventId={selectedEventId}
             onBack={() => setCurrentView("dashboard")}
           />
+        )}
+        {currentView === "event-settings" && (
+          <EventSettings onBack={() => setCurrentView(parentEventView)} />
+        )}
+        {currentView === "communication-tools" && (
+          <CommunicationTools onBack={() => setCurrentView(parentEventView)} />
+        )}
+        {currentView === "event-management" && (
+          <EventManagement onBack={() => setCurrentView(parentEventView)} />
+        )}
+        {currentView === "analytics-reports" && (
+          <AnalyticsReports onBack={() => setCurrentView(parentEventView)} />
+        )}
+        {currentView === "advanced-features" && (
+          <AdvancedFeatures onBack={() => setCurrentView(parentEventView)} />
         )}
       </Route>
       <Route component={NotFound} />

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, UtensilsCrossed, Wine, Gift, Music, Camera, MapPin, Check, ChevronDown, ChevronUp, Info, ClipboardList, Megaphone, Users } from "lucide-react";
+import { ArrowLeft, UtensilsCrossed, Wine, Gift, Music, Camera, MapPin, Check, ChevronDown, ChevronUp, Info, ClipboardList, Megaphone, Users, Settings, MessageSquare, CalendarX, BarChart, Sparkles, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +16,11 @@ interface EventDetailsPotluckProps {
   onPhotoAlbum?: () => void;
   onLocationDetails?: () => void;
   onManageHostTeam?: () => void;
+  onEventSettings?: () => void;
+  onCommunicationTools?: () => void;
+  onEventManagement?: () => void;
+  onAnalyticsReports?: () => void;
+  onAdvancedFeatures?: () => void;
 }
 
 export default function EventDetailsPotluck({
@@ -29,6 +34,11 @@ export default function EventDetailsPotluck({
   onPhotoAlbum,
   onLocationDetails,
   onManageHostTeam,
+  onEventSettings,
+  onCommunicationTools,
+  onEventManagement,
+  onAnalyticsReports,
+  onAdvancedFeatures,
 }: EventDetailsPotluckProps) {
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -402,10 +412,86 @@ export default function EventDetailsPotluck({
             </div>
           </TabsContent>
 
-          <TabsContent value="more" className="mt-6">
-            <div className="bg-card rounded-xl p-6 text-center">
-              <p className="text-muted-foreground">Additional event settings</p>
-            </div>
+          <TabsContent value="more" className="mt-6 space-y-3">
+            <Button
+              variant="secondary"
+              className="w-full justify-between"
+              onClick={onEventSettings}
+              data-testid="button-event-settings"
+            >
+              <div className="flex items-center gap-3">
+                <Settings className="w-5 h-5 text-primary" />
+                <div className="text-left">
+                  <div className="font-semibold">Event Settings</div>
+                  <div className="text-xs text-muted-foreground">Edit details, privacy, RSVP deadline, guest limits</div>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5" />
+            </Button>
+
+            <Button
+              variant="secondary"
+              className="w-full justify-between"
+              onClick={onCommunicationTools}
+              data-testid="button-communication-tools"
+            >
+              <div className="flex items-center gap-3">
+                <MessageSquare className="w-5 h-5 text-primary" />
+                <div className="text-left">
+                  <div className="font-semibold">Communication Tools</div>
+                  <div className="text-xs text-muted-foreground">Send announcements, reminders, and messages</div>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5" />
+            </Button>
+
+            <Button
+              variant="secondary"
+              className="w-full justify-between"
+              onClick={onEventManagement}
+              data-testid="button-event-management"
+            >
+              <div className="flex items-center gap-3">
+                <CalendarX className="w-5 h-5 text-primary" />
+                <div className="text-left">
+                  <div className="font-semibold">Event Management</div>
+                  <div className="text-xs text-muted-foreground">Cancel, reschedule, or duplicate event</div>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5" />
+            </Button>
+
+            <Button
+              variant="secondary"
+              className="w-full justify-between"
+              onClick={onAnalyticsReports}
+              data-testid="button-analytics-reports"
+            >
+              <div className="flex items-center gap-3">
+                <BarChart className="w-5 h-5 text-primary" />
+                <div className="text-left">
+                  <div className="font-semibold">Analytics & Reports</div>
+                  <div className="text-xs text-muted-foreground">Download guest list, view RSVP timeline</div>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5" />
+            </Button>
+
+            <Button
+              variant="secondary"
+              className="w-full justify-between"
+              onClick={onAdvancedFeatures}
+              data-testid="button-advanced-features"
+            >
+              <div className="flex items-center gap-3">
+                <Sparkles className="w-5 h-5 text-primary" />
+                <div className="text-left">
+                  <div className="font-semibold">Advanced Features</div>
+                  <div className="text-xs text-muted-foreground">QR check-in, budget tracker, weather, accessibility</div>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5" />
+            </Button>
           </TabsContent>
         </Tabs>
       </div>
