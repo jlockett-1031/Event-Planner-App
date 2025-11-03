@@ -401,7 +401,7 @@ function MenuSection({ title, children }: { title: string; children: React.React
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
       <CollapsibleTrigger asChild>
         <button
-          className="w-full flex items-center justify-between p-4 bg-card rounded-lg border border-card-border hover-elevate"
+          className="w-full flex items-center justify-between p-4 bg-muted/50 rounded-lg border border-border hover-elevate"
           data-testid={`section-${title.toLowerCase().replace(/\s/g, '-')}`}
         >
           <span className="font-semibold text-lg">{title}</span>
