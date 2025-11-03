@@ -91,86 +91,107 @@ export default function EventDetailsPotluck({
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview" className="mt-6">
-            {/* Same as EventDetailsHost overview tab */}
-            <div className="space-y-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold">Event Overview</h2>
-                <Button
-                  variant="secondary"
-                  onClick={onHostActivity}
-                  data-testid="button-host-activity"
-                >
-                  <Megaphone className="w-4 h-4 mr-2" />
-                  Host Activity Feed
-                </Button>
-              </div>
-
-              {/* Quick Actions */}
-              <div>
-                <h3 className="text-lg font-semibold mb-3">Quick Actions</h3>
-                <div className="grid grid-cols-1 gap-3">
-                  <Button
-                    variant="secondary"
-                    className="w-full justify-start"
-                    onClick={onManageHostTeam}
-                    data-testid="button-manage-host-team"
-                  >
-                    <Users className="w-4 h-4 mr-2" />
-                    Manage Host Team
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    className="w-full justify-start"
-                    onClick={onDrinkCalculator}
-                    data-testid="button-drink-calculator"
-                  >
-                    <Wine className="w-4 h-4 mr-2" />
-                    Drink Calculator
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    className="w-full justify-start"
-                    onClick={onGiftRegistry}
-                    data-testid="button-gift-registry"
-                  >
-                    <Gift className="w-4 h-4 mr-2" />
-                    Manage Gift Registry
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    className="w-full justify-start"
-                    onClick={onMusicPlaylist}
-                    data-testid="button-music-playlist"
-                  >
-                    <Music className="w-4 h-4 mr-2" />
-                    Music Playlist
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    className="w-full justify-start"
-                    onClick={onPhotoAlbum}
-                    data-testid="button-photo-album"
-                  >
-                    <Camera className="w-4 h-4 mr-2" />
-                    Photo Album
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    className="w-full justify-start"
-                    onClick={onLocationDetails}
-                    data-testid="button-location-details"
-                  >
-                    <MapPin className="w-4 h-4 mr-2" />
-                    Location & Details
-                  </Button>
+          <TabsContent value="overview" className="mt-6 space-y-6">
+            {/* Host Team */}
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Host Team</h3>
+              <div className="bg-card rounded-xl p-4 space-y-3">
+                <div className="flex items-center justify-between py-2 border-b border-border">
+                  <div>
+                    <div className="font-semibold">You</div>
+                    <Badge className="mt-1 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30">
+                      <Megaphone className="w-3 h-3 mr-1" />
+                      Comm Lead
+                    </Badge>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-border">
+                  <div>
+                    <div className="font-semibold">Maria Garcia</div>
+                    <div className="text-sm text-muted-foreground">Co-Host</div>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between py-2">
+                  <div>
+                    <div className="font-semibold">James Smith</div>
+                    <div className="text-sm text-muted-foreground">Co-Host</div>
+                  </div>
                 </div>
               </div>
-
-              <Button className="w-full" size="lg" data-testid="button-send-invites">
-                Send Invites to All
+              <Button
+                variant="secondary"
+                className="w-full mt-3"
+                onClick={onHostActivity}
+                data-testid="button-host-activity"
+              >
+                View Host Activity Feed
               </Button>
             </div>
+
+            {/* Quick Actions */}
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Quick Actions</h3>
+              <div className="space-y-2">
+                <Button
+                  variant="secondary"
+                  className="w-full justify-start"
+                  onClick={onManageHostTeam}
+                  data-testid="button-manage-host-team"
+                >
+                  <Users className="w-4 h-4 mr-2" />
+                  Manage Host Team
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="w-full justify-start"
+                  onClick={onDrinkCalculator}
+                  data-testid="button-drink-calculator"
+                >
+                  <Wine className="w-4 h-4 mr-2" />
+                  Drink Calculator
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="w-full justify-start"
+                  onClick={onGiftRegistry}
+                  data-testid="button-gift-registry"
+                >
+                  <Gift className="w-4 h-4 mr-2" />
+                  Gift Registry
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="w-full justify-start"
+                  onClick={onMusicPlaylist}
+                  data-testid="button-music-playlist"
+                >
+                  <Music className="w-4 h-4 mr-2" />
+                  Music Playlist
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="w-full justify-start"
+                  onClick={onPhotoAlbum}
+                  data-testid="button-photo-album"
+                >
+                  <Camera className="w-4 h-4 mr-2" />
+                  Photo Album
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="w-full justify-start"
+                  onClick={onLocationDetails}
+                  data-testid="button-location-details"
+                >
+                  <MapPin className="w-4 h-4 mr-2" />
+                  Location & Details
+                </Button>
+              </div>
+            </div>
+
+            <Button className="w-full" size="lg" data-testid="button-send-invites">
+              Send Invites to All
+            </Button>
           </TabsContent>
 
           <TabsContent value="guests" className="mt-6">
