@@ -10,8 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft, UtensilsCrossed, Users } from "lucide-react";
+import { ArrowLeft, UtensilsCrossed, Users, Gift } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface EventFormProps {
   onBack?: () => void;
@@ -27,6 +28,7 @@ export interface EventFormData {
   location: string;
   description: string;
   maxAttendees: string;
+  hasRegistry: boolean;
 }
 
 export default function EventForm({ onBack, onSubmit }: EventFormProps) {
@@ -39,6 +41,7 @@ export default function EventForm({ onBack, onSubmit }: EventFormProps) {
     location: "",
     description: "",
     maxAttendees: "",
+    hasRegistry: false,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -193,6 +196,28 @@ export default function EventForm({ onBack, onSubmit }: EventFormProps) {
             }
             data-testid="input-max-attendees"
           />
+        </div>
+
+        <div className="space-y-3">
+          <div className="flex items-start space-x-3 p-4 border rounded-lg hover-elevate">
+            <Checkbox
+              id="hasRegistry"
+              checked={formData.hasRegistry}
+              onCheckedChange={(checked) =>
+                setFormData({ ...formData, hasRegistry: checked as boolean })
+              }
+              data-testid="checkbox-has-registry"
+            />
+            <div className="flex-1">
+              <Label htmlFor="hasRegistry" className="flex items-center gap-2 font-semibold cursor-pointer">
+                <Gift className="w-4 h-4" />
+                Add Gift Registry
+              </Label>
+              <p className="text-sm text-muted-foreground mt-1">
+                Create a registry where guests can view and purchase gifts for your event
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="flex gap-3">
