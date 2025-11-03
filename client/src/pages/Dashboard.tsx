@@ -67,12 +67,20 @@ const mockPastEvents: Event[] = [
 ];
 
 interface DashboardProps {
+  initialViewMode?: ViewMode;
+  onViewModeChange?: (mode: ViewMode) => void;
   onCreateEvent?: () => void;
   onEventClick?: (eventId: string) => void;
+  onViewCalendar?: () => void;
 }
 
-export default function Dashboard({ onCreateEvent, onEventClick }: DashboardProps) {
-  const [viewMode, setViewMode] = useState<ViewMode>("hosting");
+export default function Dashboard({ initialViewMode = "hosting", onViewModeChange, onCreateEvent, onEventClick, onViewCalendar }: DashboardProps) {
+  const [viewMode, setViewMode] = useState<ViewMode>(initialViewMode);
+
+  const handleViewModeChange = (mode: ViewMode) => {
+    setViewMode(mode);
+    onViewModeChange?.(mode);
+  };
 
   const getEvents = () => {
     switch (viewMode) {
@@ -88,14 +96,9 @@ export default function Dashboard({ onCreateEvent, onEventClick }: DashboardProp
   const events = getEvents();
   const hasTimeConflicts = events.some(event => event.hasTimeConflict);
 
-  const handleViewCalendar = () => {
-    // TODO: Implement calendar view
-    alert("Calendar view will be implemented");
-  };
-
   return (
     <div className="min-h-screen bg-background">
-      <EventHeader activeMode={viewMode} onModeChange={setViewMode} />
+      <EventHeader activeMode={viewMode} onModeChange={handleViewModeChange} />
       
       <div className="max-w-4xl mx-auto p-6">
         <h2 className="text-3xl font-bold mb-6">
@@ -140,7 +143,7 @@ export default function Dashboard({ onCreateEvent, onEventClick }: DashboardProp
 
         {viewMode === "attending" && hasTimeConflicts && (
           <Button
-            onClick={handleViewCalendar}
+            onClick={onViewCalendar}
             variant="secondary"
             className="w-full"
             size="lg"

@@ -17,19 +17,26 @@ import MusicDashboard from "@/pages/MusicDashboard";
 import PhotoAlbum from "@/pages/PhotoAlbum";
 import LocationDetails from "@/pages/LocationDetails";
 import ManageHostTeam from "@/pages/ManageHostTeam";
+import EventCalendar from "@/pages/EventCalendar";
 import NotFound from "@/pages/not-found";
 
+type ViewMode = "hosting" | "attending" | "past";
+
 function Router() {
-  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "details-potluck" | "details-guest" | "host-activity" | "guest-list" | "drink-calculator" | "gift-registry" | "music-dashboard" | "photo-album" | "location-details" | "manage-host-team">("dashboard");
+  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "details-potluck" | "details-guest" | "host-activity" | "guest-list" | "drink-calculator" | "gift-registry" | "music-dashboard" | "photo-album" | "location-details" | "manage-host-team" | "calendar">("dashboard");
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [parentEventView, setParentEventView] = useState<"details" | "details-potluck">("details");
+  const [dashboardViewMode, setDashboardViewMode] = useState<ViewMode>("hosting");
 
   return (
     <Switch>
       <Route path="/">
         {currentView === "dashboard" && (
           <Dashboard
+            initialViewMode={dashboardViewMode}
+            onViewModeChange={setDashboardViewMode}
             onCreateEvent={() => setCurrentView("create")}
+            onViewCalendar={() => setCurrentView("calendar")}
             onEventClick={(eventId) => {
               setSelectedEventId(eventId);
               // Route to guest view for attending events (IDs "3", "4", and "6")
@@ -120,6 +127,9 @@ function Router() {
         )}
         {currentView === "manage-host-team" && (
           <ManageHostTeam onBack={() => setCurrentView(parentEventView)} />
+        )}
+        {currentView === "calendar" && (
+          <EventCalendar onBack={() => setCurrentView("dashboard")} />
         )}
         {currentView === "details-guest" && selectedEventId && (
           <EventDetailsGuest
