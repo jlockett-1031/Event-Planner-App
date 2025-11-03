@@ -8,6 +8,7 @@ import Dashboard from "@/pages/Dashboard";
 import EventForm from "@/components/EventForm";
 import EventDetailsHost from "@/pages/EventDetailsHost";
 import EventDetailsPotluck from "@/pages/EventDetailsPotluck";
+import EventDetailsGuest from "@/pages/EventDetailsGuest";
 import HostActivityFeed from "@/pages/HostActivityFeed";
 import GuestList from "@/pages/GuestList";
 import DrinkCalculator from "@/pages/DrinkCalculator";
@@ -19,7 +20,7 @@ import ManageHostTeam from "@/pages/ManageHostTeam";
 import NotFound from "@/pages/not-found";
 
 function Router() {
-  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "details-potluck" | "host-activity" | "guest-list" | "drink-calculator" | "gift-registry" | "music-dashboard" | "photo-album" | "location-details" | "manage-host-team">("dashboard");
+  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "details-potluck" | "details-guest" | "host-activity" | "guest-list" | "drink-calculator" | "gift-registry" | "music-dashboard" | "photo-album" | "location-details" | "manage-host-team">("dashboard");
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [parentEventView, setParentEventView] = useState<"details" | "details-potluck">("details");
 
@@ -31,11 +32,17 @@ function Router() {
             onCreateEvent={() => setCurrentView("create")}
             onEventClick={(eventId) => {
               setSelectedEventId(eventId);
+              // Route to guest view for attending events (IDs "3" and "4")
+              if (eventId === "3" || eventId === "4") {
+                setCurrentView("details-guest");
+              }
               // Route to potluck page for Holiday Potluck event (ID "2")
-              if (eventId === "2") {
+              else if (eventId === "2") {
                 setParentEventView("details-potluck");
                 setCurrentView("details-potluck");
-              } else {
+              }
+              // Route to regular details page for other hosting events
+              else {
                 setParentEventView("details");
                 setCurrentView("details");
               }
@@ -113,6 +120,12 @@ function Router() {
         )}
         {currentView === "manage-host-team" && (
           <ManageHostTeam onBack={() => setCurrentView(parentEventView)} />
+        )}
+        {currentView === "details-guest" && selectedEventId && (
+          <EventDetailsGuest
+            eventId={selectedEventId}
+            onBack={() => setCurrentView("dashboard")}
+          />
         )}
       </Route>
       <Route component={NotFound} />

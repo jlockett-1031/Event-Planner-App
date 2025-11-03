@@ -1,0 +1,362 @@
+import { useState } from "react";
+import { ArrowLeft, MapPin, Calendar, Clock, Music, UtensilsCrossed, Info, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Input } from "@/components/ui/input";
+
+interface EventDetailsGuestProps {
+  eventId: string;
+  onBack?: () => void;
+}
+
+// Component for potluck items that can be claimed
+function PotluckItemClaim({ name, claimedBy }: { name: string; claimedBy: string }) {
+  const [claimed, setClaimed] = useState(claimedBy !== "Unclaimed");
+  const [claimer, setClaimer] = useState(claimedBy);
+
+  const handleClaim = () => {
+    setClaimed(true);
+    setClaimer("You");
+  };
+
+  const handleUnclaim = () => {
+    setClaimed(false);
+    setClaimer("Unclaimed");
+  };
+
+  return (
+    <div className="bg-card rounded-lg p-4 border border-card-border">
+      <div className="flex items-center justify-between">
+        <div className="flex-1">
+          <div className="font-semibold text-base">{name}</div>
+          {claimed ? (
+            <p className="text-sm text-primary mt-1">{claimer}</p>
+          ) : (
+            <p className="text-sm text-muted-foreground mt-1">{claimer}</p>
+          )}
+        </div>
+        {claimed && claimer === "You" ? (
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleUnclaim}
+            data-testid={`button-unclaim-${name.toLowerCase().replace(/\s+/g, '-')}`}
+          >
+            Unclaim
+          </Button>
+        ) : !claimed ? (
+          <Button
+            variant="default"
+            size="sm"
+            onClick={handleClaim}
+            data-testid={`button-claim-${name.toLowerCase().replace(/\s+/g, '-')}`}
+          >
+            Claim
+          </Button>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+// Collapsible section for potluck categories
+function PotluckSection({ title, children }: { title: string; children: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <CollapsibleTrigger
+        className="w-full bg-primary/10 rounded-lg p-4 flex items-center justify-between hover-elevate active-elevate-2"
+        data-testid={`section-${title.toLowerCase().replace(/\s+/g, '-')}`}
+      >
+        <h3 className="text-lg font-semibold">{title}</h3>
+        <span className="text-sm text-muted-foreground">
+          {isOpen ? "Hide" : "View"}
+        </span>
+      </CollapsibleTrigger>
+      <CollapsibleContent className="mt-3 space-y-3">
+        {children}
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
+interface Song {
+  title: string;
+  artist: string;
+}
+
+export default function EventDetailsGuest({ eventId, onBack }: EventDetailsGuestProps) {
+  const [newSongTitle, setNewSongTitle] = useState("");
+  const [newSongArtist, setNewSongArtist] = useState("");
+  const [isAddingSong, setIsAddingSong] = useState(false);
+  const [playlist, setPlaylist] = useState<Song[]>([
+    { title: "Auld Lang Syne", artist: "Traditional" },
+    { title: "Celebration", artist: "Kool & The Gang" },
+    { title: "Don't Stop Believin'", artist: "Journey" },
+  ]);
+
+  // Mock data based on eventId
+  const isNewYearsEve = eventId === "3";
+  
+  const eventData = isNewYearsEve ? {
+    name: "New Year's Eve Bash",
+    date: "December 31, 2025",
+    time: "9:00 PM",
+    location: "Downtown Event Center",
+    address: "456 Party Avenue, Suite 100",
+    type: "Potluck",
+    hostName: "Alex Johnson"
+  } : {
+    name: "Mike's Birthday Party",
+    date: "January 5, 2026",
+    time: "3:00 PM",
+    location: "Central Park Pavilion",
+    address: "Central Park, North End",
+    type: "Hosted Meal",
+    hostName: "Mike Chen"
+  };
+
+  const handleAddSong = () => {
+    if (newSongTitle && newSongArtist) {
+      // Add new song to the playlist
+      setPlaylist([...playlist, { title: newSongTitle, artist: newSongArtist }]);
+      setNewSongTitle("");
+      setNewSongArtist("");
+      setIsAddingSong(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="bg-gradient-to-br from-[hsl(var(--gradient-start))] to-[hsl(var(--gradient-end))] text-white py-6 px-6">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-3xl font-bold text-center mb-2">{eventData.name}</h1>
+          <div className="flex items-center justify-center gap-2 text-white/90 text-sm">
+            <Calendar className="w-4 h-4" />
+            <span>{eventData.date}</span>
+            <span>•</span>
+            <Clock className="w-4 h-4" />
+            <span>{eventData.time}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto p-6">
+        <button
+          onClick={onBack}
+          className="flex items-center gap-2 text-muted-foreground mb-6 hover:text-foreground transition-colors"
+          data-testid="button-back"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Events
+        </button>
+
+        <div className="space-y-6">
+          {/* Event Info Card */}
+          <div className="bg-card rounded-xl p-6 border border-card-border">
+            <div className="space-y-4">
+              <div>
+                <div className="text-sm text-muted-foreground mb-1">Hosted by</div>
+                <div className="font-semibold text-lg">{eventData.hostName}</div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary">{eventData.type}</Badge>
+              </div>
+
+              <div className="pt-2 border-t border-border">
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <div>
+                    <div className="font-semibold">{eventData.location}</div>
+                    <div className="text-sm text-muted-foreground">{eventData.address}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Food & Beverage Menu */}
+          {isNewYearsEve ? (
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <UtensilsCrossed className="w-5 h-5 text-primary" />
+                <h2 className="text-2xl font-bold">Food & Beverage</h2>
+              </div>
+
+              <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4 flex gap-3 mb-4">
+                <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-blue-900 dark:text-blue-100">
+                  This is a potluck event! Claim an item below to let others know what you'll bring.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                <PotluckSection title="Appetizers">
+                  <PotluckItemClaim name="Chips & Dip" claimedBy="Sarah M." />
+                  <PotluckItemClaim name="Veggie Platter" claimedBy="Unclaimed" />
+                  <PotluckItemClaim name="Cheese & Crackers" claimedBy="Unclaimed" />
+                </PotluckSection>
+
+                <PotluckSection title="Main Dishes">
+                  <PotluckItemClaim name="Pizza" claimedBy="Mike T." />
+                  <PotluckItemClaim name="Wings" claimedBy="Unclaimed" />
+                  <PotluckItemClaim name="Pasta Salad" claimedBy="Unclaimed" />
+                </PotluckSection>
+
+                <PotluckSection title="Desserts">
+                  <PotluckItemClaim name="Cookies" claimedBy="Unclaimed" />
+                  <PotluckItemClaim name="Brownies" claimedBy="Unclaimed" />
+                  <PotluckItemClaim name="Fruit Tray" claimedBy="Unclaimed" />
+                </PotluckSection>
+
+                <PotluckSection title="Drinks">
+                  <PotluckItemClaim name="Champagne" claimedBy="Host Provided" />
+                  <PotluckItemClaim name="Sodas" claimedBy="Unclaimed" />
+                  <PotluckItemClaim name="Juice" claimedBy="Unclaimed" />
+                  <PotluckItemClaim name="Water & Ice" claimedBy="Unclaimed" />
+                </PotluckSection>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <UtensilsCrossed className="w-5 h-5 text-primary" />
+                <h2 className="text-2xl font-bold">Menu</h2>
+              </div>
+
+              <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4 flex gap-3 mb-4">
+                <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-blue-900 dark:text-blue-100">
+                  The host will provide all food and beverages for this event.
+                </p>
+              </div>
+
+              <div className="bg-card rounded-lg p-6 border border-card-border">
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold mb-2">Main Course</h3>
+                    <p className="text-sm text-muted-foreground">BBQ Ribs & Grilled Chicken</p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-2">Sides</h3>
+                    <p className="text-sm text-muted-foreground">Coleslaw, Potato Salad, Corn on the Cob</p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-2">Dessert</h3>
+                    <p className="text-sm text-muted-foreground">Birthday Cake</p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-2">Beverages</h3>
+                    <p className="text-sm text-muted-foreground">Assorted Sodas & Water</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Music Playlist */}
+          {isNewYearsEve && (
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Music className="w-5 h-5 text-primary" />
+                <h2 className="text-2xl font-bold">Music Playlist</h2>
+              </div>
+
+              <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4 flex gap-3 mb-4">
+                <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-blue-900 dark:text-blue-100">
+                  Help create the perfect party atmosphere! Add your favorite songs to the playlist.
+                </p>
+              </div>
+
+              {/* Current Playlist */}
+              <div className="space-y-3 mb-4">
+                {playlist.map((song, index) => (
+                  <div
+                    key={index}
+                    className="bg-card rounded-lg p-4 border border-card-border"
+                    data-testid={`playlist-song-${index}`}
+                  >
+                    <div className="font-semibold">{song.title}</div>
+                    <div className="text-sm text-muted-foreground">{song.artist}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Add Song Section */}
+              {!isAddingSong ? (
+                <Button
+                  variant="secondary"
+                  className="w-full"
+                  onClick={() => setIsAddingSong(true)}
+                  data-testid="button-add-song"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Suggest a Song
+                </Button>
+              ) : (
+                <div className="bg-card rounded-lg p-4 border border-card-border space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Song Title</label>
+                    <Input
+                      placeholder="e.g., Party Rock Anthem"
+                      value={newSongTitle}
+                      onChange={(e) => setNewSongTitle(e.target.value)}
+                      data-testid="input-song-title"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Artist</label>
+                    <Input
+                      placeholder="e.g., LMFAO"
+                      value={newSongArtist}
+                      onChange={(e) => setNewSongArtist(e.target.value)}
+                      data-testid="input-song-artist"
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={handleAddSong}
+                      className="flex-1"
+                      data-testid="button-submit-song"
+                    >
+                      Add to Playlist
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        setIsAddingSong(false);
+                        setNewSongTitle("");
+                        setNewSongArtist("");
+                      }}
+                      data-testid="button-cancel-song"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* RSVP Section */}
+          <div className="bg-card rounded-xl p-6 border border-card-border">
+            <h3 className="text-xl font-semibold mb-4">Your RSVP</h3>
+            <div className="flex items-center gap-2 mb-4">
+              <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300">
+                Attending
+              </Badge>
+            </div>
+            <Button variant="secondary" className="w-full" data-testid="button-change-rsvp">
+              Change RSVP
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
