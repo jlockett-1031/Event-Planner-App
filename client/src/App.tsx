@@ -11,10 +11,11 @@ import HostActivityFeed from "@/pages/HostActivityFeed";
 import GuestList from "@/pages/GuestList";
 import DrinkCalculator from "@/pages/DrinkCalculator";
 import GiftRegistry from "@/pages/GiftRegistry";
+import MusicDashboard from "@/pages/MusicDashboard";
 import NotFound from "@/pages/not-found";
 
 function Router() {
-  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "host-activity" | "guest-list" | "drink-calculator" | "gift-registry">("dashboard");
+  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "host-activity" | "guest-list" | "drink-calculator" | "gift-registry" | "music-dashboard">("dashboard");
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   return (
@@ -52,7 +53,7 @@ function Router() {
             onManagePotluck={() => console.log("Manage Potluck")}
             onDrinkCalculator={() => setCurrentView("drink-calculator")}
             onGiftRegistry={() => setCurrentView("gift-registry")}
-            onMusicPlaylist={() => console.log("Music Playlist")}
+            onMusicPlaylist={() => setCurrentView("music-dashboard")}
             onHostActivity={() => setCurrentView("host-activity")}
           />
         )}
@@ -71,6 +72,9 @@ function Router() {
         )}
         {currentView === "gift-registry" && (
           <GiftRegistry onBack={() => setCurrentView("details")} />
+        )}
+        {currentView === "music-dashboard" && (
+          <MusicDashboard onBack={() => setCurrentView("details")} />
         )}
       </Route>
       <Route component={NotFound} />
