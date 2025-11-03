@@ -175,6 +175,17 @@ export default function EventDetailsPotluck({
 
           <TabsContent value="guests" className="mt-6">
             <div className="space-y-6">
+              {/* Manage Guest List Button */}
+              <Button
+                variant="default"
+                className="w-full"
+                onClick={onManageGuests}
+                data-testid="button-manage-guests"
+              >
+                <ClipboardList className="w-4 h-4 mr-2" />
+                Manage Guest List
+              </Button>
+
               {/* Import Button */}
               <Button
                 variant="secondary"
