@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, MapPin, Calendar, Clock, Music, UtensilsCrossed, Info, Plus, ExternalLink, Gift } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, Clock, Music, UtensilsCrossed, Info, Plus, ExternalLink, Gift, Megaphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -160,6 +160,13 @@ interface Song {
   artist: string;
 }
 
+interface Announcement {
+  id: string;
+  message: string;
+  timestamp: string;
+  author: string;
+}
+
 export default function EventDetailsGuest({ eventId, onBack }: EventDetailsGuestProps) {
   const [newSongTitle, setNewSongTitle] = useState("");
   const [newSongArtist, setNewSongArtist] = useState("");
@@ -199,6 +206,54 @@ export default function EventDetailsGuest({ eventId, onBack }: EventDetailsGuest
     type: "Hosted Meal",
     hostName: "Mike Chen"
   };
+
+  // Mock announcements from hosts
+  const announcements: Announcement[] = isNewYearsEve ? [
+    {
+      id: "1",
+      message: "Reminder: Please bring your potluck items by 8:30 PM so we can set up before the party starts!",
+      timestamp: "2 hours ago",
+      author: "Alex Johnson"
+    },
+    {
+      id: "2",
+      message: "We'll have a champagne toast at midnight! Looking forward to celebrating with everyone.",
+      timestamp: "1 day ago",
+      author: "Alex Johnson"
+    },
+    {
+      id: "3",
+      message: "Parking is available in the building's underground lot. Just tell the attendant you're here for the New Year's party.",
+      timestamp: "3 days ago",
+      author: "Alex Johnson"
+    }
+  ] : isCountdownParty ? [
+    {
+      id: "1",
+      message: "Dress code: Smart casual. It can get chilly on the rooftop, so bring a jacket!",
+      timestamp: "5 hours ago",
+      author: "Sarah Martinez"
+    },
+    {
+      id: "2",
+      message: "The rooftop bar will be open with a special New Year's menu. Drinks are on us for the first hour!",
+      timestamp: "2 days ago",
+      author: "Sarah Martinez"
+    }
+  ] : [
+    {
+      id: "1",
+      message: "Thanks everyone for RSVPing! We're at 35 guests now. Can't wait to celebrate together!",
+      timestamp: "1 day ago",
+      author: "Mike Chen"
+    },
+    {
+      id: "2",
+      message: "We'll have outdoor games set up (weather permitting). Feel free to bring any yard games you'd like to share!",
+      timestamp: "4 days ago",
+      author: "Mike Chen"
+    }
+  ];
 
   const handleAddSong = () => {
     if (newSongTitle && newSongArtist) {
@@ -250,6 +305,34 @@ export default function EventDetailsGuest({ eventId, onBack }: EventDetailsGuest
               </div>
             </div>
           </div>
+
+          {/* Host Announcements */}
+          {announcements.length > 0 && (
+            <div className="bg-card rounded-xl p-6 border border-card-border">
+              <div className="flex items-center gap-2 mb-4">
+                <Megaphone className="w-5 h-5 text-primary" />
+                <h2 className="text-xl font-bold">Host Announcements</h2>
+              </div>
+              
+              <div className="space-y-3">
+                {announcements.map((announcement) => (
+                  <div
+                    key={announcement.id}
+                    className="bg-primary/5 border border-primary/20 rounded-lg p-4"
+                    data-testid={`announcement-${announcement.id}`}
+                  >
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <div className="font-semibold text-sm">{announcement.author}</div>
+                      <div className="text-xs text-muted-foreground whitespace-nowrap">
+                        {announcement.timestamp}
+                      </div>
+                    </div>
+                    <p className="text-sm leading-relaxed">{announcement.message}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Location & Details Card */}
           <div className="bg-card rounded-xl p-6 border border-card-border">
