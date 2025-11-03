@@ -14,6 +14,7 @@ interface EventDetailsHostProps {
   onMusicPlaylist?: () => void;
   onHostActivity?: () => void;
   onPhotoAlbum?: () => void;
+  onLocationDetails?: () => void;
 }
 
 export default function EventDetailsHost({
@@ -25,6 +26,7 @@ export default function EventDetailsHost({
   onMusicPlaylist,
   onHostActivity,
   onPhotoAlbum,
+  onLocationDetails,
 }: EventDetailsHostProps) {
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -175,6 +177,7 @@ export default function EventDetailsHost({
                 <Button
                   variant="secondary"
                   className="w-full justify-start"
+                  onClick={onLocationDetails}
                   data-testid="button-location-details"
                 >
                   <MapPin className="w-4 h-4 mr-2" />
