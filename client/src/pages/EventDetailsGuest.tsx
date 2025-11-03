@@ -71,7 +71,12 @@ function RegistryItem({ name, store, price, purchasedBy, link }: {
   const [purchased, setPurchased] = useState(purchasedBy !== "Available");
   const [purchaser, setPurchaser] = useState(purchasedBy);
 
-  const handlePurchase = () => {
+  const handlePurchaseNow = () => {
+    // Open the store link
+    if (link) {
+      window.open(link, '_blank', 'noopener,noreferrer');
+    }
+    // Mark as purchased
     setPurchased(true);
     setPurchaser("You");
   };
@@ -89,7 +94,7 @@ function RegistryItem({ name, store, price, purchasedBy, link }: {
           <div className="text-sm text-muted-foreground mb-2">{store} • {price}</div>
           {purchased ? (
             <Badge variant="secondary" className="text-xs">
-              {purchaser === "You" ? "Purchased by You" : `Purchased by ${purchaser}`}
+              Purchased
             </Badge>
           ) : (
             <Badge variant="outline" className="text-xs">
@@ -98,17 +103,6 @@ function RegistryItem({ name, store, price, purchasedBy, link }: {
           )}
         </div>
         <div className="flex flex-col gap-2">
-          {link && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
-              data-testid={`button-view-${name.toLowerCase().replace(/\s+/g, '-')}`}
-            >
-              <ExternalLink className="w-3 h-3 mr-1" />
-              View
-            </Button>
-          )}
           {purchased && purchaser === "You" ? (
             <Button
               variant="secondary"
@@ -122,12 +116,17 @@ function RegistryItem({ name, store, price, purchasedBy, link }: {
             <Button
               variant="default"
               size="sm"
-              onClick={handlePurchase}
+              onClick={handlePurchaseNow}
               data-testid={`button-purchase-${name.toLowerCase().replace(/\s+/g, '-')}`}
             >
-              Mark as Purchased
+              <ExternalLink className="w-3 h-3 mr-2" />
+              Purchase Now!
             </Button>
-          ) : null}
+          ) : (
+            <Badge variant="secondary" className="text-xs">
+              Purchased by {purchaser}
+            </Badge>
+          )}
         </div>
       </div>
     </div>
