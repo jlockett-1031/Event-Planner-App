@@ -174,17 +174,8 @@ export default function EventDetailsPotluck({
           </TabsContent>
 
           <TabsContent value="guests" className="mt-6">
-            {/* Same guest list content - will be reused */}
             <div className="space-y-6">
-              <Button
-                variant="default"
-                className="w-full mb-4"
-                onClick={onManageGuests}
-                data-testid="button-manage-guests"
-              >
-                <ClipboardList className="w-4 h-4 mr-2" />
-                Manage Guest List
-              </Button>
+              {/* Import Button */}
               <Button
                 variant="secondary"
                 className="w-full"
@@ -193,19 +184,94 @@ export default function EventDetailsPotluck({
                 + Import from Contacts
               </Button>
 
+              {/* Search */}
+              <input
+                type="text"
+                placeholder="Search guests..."
+                className="w-full px-4 py-3 rounded-lg border border-input bg-background"
+                data-testid="input-search-guests"
+              />
+
               {/* Attending Section */}
               <div>
-                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Check className="w-5 h-5 text-primary" />
-                  Attending (28)
-                </h3>
+                <h3 className="text-xl font-bold mb-4">Attending (28)</h3>
                 <div className="space-y-3">
                   <div className="bg-card rounded-lg p-4 border border-card-border">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <span className="font-semibold text-base">Emily Chen</span>
-                          <Badge variant="secondary" className="text-xs">Confirmed</Badge>
+                          <span className="text-emerald-600 flex items-center gap-1">
+                            <Check className="w-4 h-4" />
+                            <span className="text-sm">Yes</span>
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">No additional guests</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-card rounded-lg p-4 border border-card-border">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-base">Michael Rodriguez</span>
+                          <span className="text-emerald-600 flex items-center gap-1">
+                            <Check className="w-4 h-4" />
+                            <span className="text-sm">Yes</span>
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">Bringing mac & cheese</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-card rounded-lg p-4 border border-card-border">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-base">Sarah Martinez</span>
+                          <span className="text-emerald-600 flex items-center gap-1">
+                            <Check className="w-4 h-4" />
+                            <span className="text-sm">Yes</span>
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">+2 guests</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Maybe Section */}
+              <div>
+                <h3 className="text-xl font-bold mb-4">Maybe (3)</h3>
+                <div className="space-y-3">
+                  <div className="bg-card rounded-lg p-4 border border-card-border">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-base">Alex Johnson</span>
+                          <span className="text-amber-600 flex items-center gap-1">
+                            <span className="text-sm">? Maybe</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Not Yet Responded Section */}
+              <div>
+                <h3 className="text-xl font-bold mb-4">Not Yet Responded (8)</h3>
+                <div className="space-y-3">
+                  <div className="bg-card rounded-lg p-4 border border-card-border">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-base">Jordan Taylor</span>
+                          <span className="text-muted-foreground text-sm">Pending</span>
                         </div>
                       </div>
                     </div>
