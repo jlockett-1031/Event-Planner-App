@@ -10,7 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, UtensilsCrossed, Users } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface EventFormProps {
   onBack?: () => void;
@@ -20,6 +21,7 @@ interface EventFormProps {
 export interface EventFormData {
   name: string;
   type: string;
+  menuType: string;
   date: string;
   time: string;
   location: string;
@@ -31,6 +33,7 @@ export default function EventForm({ onBack, onSubmit }: EventFormProps) {
   const [formData, setFormData] = useState<EventFormData>({
     name: "",
     type: "birthday",
+    menuType: "set-menu",
     date: "",
     time: "",
     location: "",
@@ -88,6 +91,40 @@ export default function EventForm({ onBack, onSubmit }: EventFormProps) {
               <SelectItem value="other">Other</SelectItem>
             </SelectContent>
           </Select>
+        </div>
+
+        <div className="space-y-3">
+          <Label>Food & Beverage Menu Type *</Label>
+          <RadioGroup
+            value={formData.menuType}
+            onValueChange={(value) => setFormData({ ...formData, menuType: value })}
+            data-testid="radio-menu-type"
+          >
+            <div className="flex items-start space-x-3 p-4 border rounded-lg hover-elevate">
+              <RadioGroupItem value="set-menu" id="set-menu" data-testid="radio-set-menu" />
+              <div className="flex-1">
+                <Label htmlFor="set-menu" className="flex items-center gap-2 font-semibold cursor-pointer">
+                  <UtensilsCrossed className="w-4 h-4" />
+                  Set Menu
+                </Label>
+                <p className="text-sm text-muted-foreground mt-1">
+                  You provide all food and beverages for the event
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-3 p-4 border rounded-lg hover-elevate">
+              <RadioGroupItem value="potluck" id="potluck" data-testid="radio-potluck" />
+              <div className="flex-1">
+                <Label htmlFor="potluck" className="flex items-center gap-2 font-semibold cursor-pointer">
+                  <Users className="w-4 h-4" />
+                  Potluck
+                </Label>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Guests bring dishes to share at the event
+                </p>
+              </div>
+            </div>
+          </RadioGroup>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
