@@ -318,17 +318,15 @@ export default function PastEventDetailsGuest({ eventId, onBack }: PastEventDeta
                 </Button>
               )}
 
-              {!eventData.allowPhotoDownload && (
-                <Button
-                  variant="secondary"
-                  className="w-full"
-                  onClick={handleShareLink}
-                  data-testid="button-share-link"
-                >
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Share Album Link
-                </Button>
-              )}
+              <Button
+                variant="secondary"
+                className="w-full"
+                onClick={handleShareLink}
+                data-testid="button-share-link"
+              >
+                <Share2 className="w-4 h-4 mr-2" />
+                Share Album Link
+              </Button>
             </div>
           </div>
 
