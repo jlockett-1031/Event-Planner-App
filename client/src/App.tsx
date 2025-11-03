@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import Dashboard from "@/pages/Dashboard";
 import EventForm from "@/components/EventForm";
 import EventDetailsHost from "@/pages/EventDetailsHost";
+import EventDetailsPotluck from "@/pages/EventDetailsPotluck";
 import HostActivityFeed from "@/pages/HostActivityFeed";
 import GuestList from "@/pages/GuestList";
 import DrinkCalculator from "@/pages/DrinkCalculator";
@@ -17,8 +18,9 @@ import LocationDetails from "@/pages/LocationDetails";
 import NotFound from "@/pages/not-found";
 
 function Router() {
-  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "host-activity" | "guest-list" | "drink-calculator" | "gift-registry" | "music-dashboard" | "photo-album" | "location-details">("dashboard");
+  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "details-potluck" | "host-activity" | "guest-list" | "drink-calculator" | "gift-registry" | "music-dashboard" | "photo-album" | "location-details">("dashboard");
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [parentEventView, setParentEventView] = useState<"details" | "details-potluck">("details");
 
   return (
     <Switch>
@@ -28,7 +30,14 @@ function Router() {
             onCreateEvent={() => setCurrentView("create")}
             onEventClick={(eventId) => {
               setSelectedEventId(eventId);
-              setCurrentView("details");
+              // Route to potluck page for Holiday Potluck event (ID "2")
+              if (eventId === "2") {
+                setParentEventView("details-potluck");
+                setCurrentView("details-potluck");
+              } else {
+                setParentEventView("details");
+                setCurrentView("details");
+              }
             }}
           />
         )}
@@ -61,30 +70,43 @@ function Router() {
             onLocationDetails={() => setCurrentView("location-details")}
           />
         )}
+        {currentView === "details-potluck" && (
+          <EventDetailsPotluck
+            onBack={() => setCurrentView("dashboard")}
+            onManageGuests={() => setCurrentView("guest-list")}
+            onManagePotluck={() => console.log("Manage Potluck")}
+            onDrinkCalculator={() => setCurrentView("drink-calculator")}
+            onGiftRegistry={() => setCurrentView("gift-registry")}
+            onMusicPlaylist={() => setCurrentView("music-dashboard")}
+            onHostActivity={() => setCurrentView("host-activity")}
+            onPhotoAlbum={() => setCurrentView("photo-album")}
+            onLocationDetails={() => setCurrentView("location-details")}
+          />
+        )}
         {currentView === "host-activity" && (
-          <HostActivityFeed onBack={() => setCurrentView("details")} />
+          <HostActivityFeed onBack={() => setCurrentView(parentEventView)} />
         )}
         {currentView === "guest-list" && (
-          <GuestList onBack={() => setCurrentView("details")} />
+          <GuestList onBack={() => setCurrentView(parentEventView)} />
         )}
         {currentView === "drink-calculator" && (
           <DrinkCalculator 
-            onBack={() => setCurrentView("details")} 
+            onBack={() => setCurrentView(parentEventView)} 
             onCalculate={() => console.log("Calculate")}
             onAdvancedOptions={() => console.log("Advanced Options")}
           />
         )}
         {currentView === "gift-registry" && (
-          <GiftRegistry onBack={() => setCurrentView("details")} />
+          <GiftRegistry onBack={() => setCurrentView(parentEventView)} />
         )}
         {currentView === "music-dashboard" && (
-          <MusicDashboard onBack={() => setCurrentView("details")} />
+          <MusicDashboard onBack={() => setCurrentView(parentEventView)} />
         )}
         {currentView === "photo-album" && (
-          <PhotoAlbum onBack={() => setCurrentView("details")} />
+          <PhotoAlbum onBack={() => setCurrentView(parentEventView)} />
         )}
         {currentView === "location-details" && (
-          <LocationDetails onBack={() => setCurrentView("details")} />
+          <LocationDetails onBack={() => setCurrentView(parentEventView)} />
         )}
       </Route>
       <Route component={NotFound} />
