@@ -86,6 +86,12 @@ export default function Dashboard({ onCreateEvent, onEventClick }: DashboardProp
   };
 
   const events = getEvents();
+  const hasTimeConflicts = events.some(event => event.hasTimeConflict);
+
+  const handleViewCalendar = () => {
+    // TODO: Implement calendar view
+    alert("Calendar view will be implemented");
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -129,6 +135,18 @@ export default function Dashboard({ onCreateEvent, onEventClick }: DashboardProp
           >
             <Plus className="w-5 h-5 mr-2" />
             Create New Event
+          </Button>
+        )}
+
+        {viewMode === "attending" && hasTimeConflicts && (
+          <Button
+            onClick={handleViewCalendar}
+            variant="secondary"
+            className="w-full"
+            size="lg"
+            data-testid="button-view-calendar"
+          >
+            View Calendar
           </Button>
         )}
       </div>
