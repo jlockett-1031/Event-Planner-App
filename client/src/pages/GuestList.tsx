@@ -1,4 +1,4 @@
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, Check, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -91,6 +91,17 @@ export default function GuestList({ onBack }: GuestListProps) {
           className="mb-6"
           data-testid="input-search-guests"
         />
+
+        {/* Developer Note */}
+        <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg">
+          <div className="flex gap-3">
+            <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+            <div className="text-sm text-blue-900 dark:text-blue-100">
+              <p className="font-semibold mb-1">Developer Note</p>
+              <p>This page will include functionality to override and review RSVPs. Hosts will be able to manually update guest responses, view detailed RSVP history, and manage attendance confirmations.</p>
+            </div>
+          </div>
+        </div>
 
         {/* Attending Section */}
         <div className="mb-8">
