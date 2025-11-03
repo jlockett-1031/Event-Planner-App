@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, UtensilsCrossed, Wine, Gift, Music, Camera, MapPin, Check, ChevronDown, ChevronUp, Info, ClipboardList, Megaphone } from "lucide-react";
+import { ArrowLeft, UtensilsCrossed, Wine, Gift, Music, Camera, MapPin, Check, ChevronDown, ChevronUp, Info, ClipboardList, Megaphone, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,7 @@ interface EventDetailsPotluckProps {
   onHostActivity?: () => void;
   onPhotoAlbum?: () => void;
   onLocationDetails?: () => void;
+  onManageHostTeam?: () => void;
 }
 
 export default function EventDetailsPotluck({
@@ -27,6 +28,7 @@ export default function EventDetailsPotluck({
   onHostActivity,
   onPhotoAlbum,
   onLocationDetails,
+  onManageHostTeam,
 }: EventDetailsPotluckProps) {
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -111,20 +113,11 @@ export default function EventDetailsPotluck({
                   <Button
                     variant="secondary"
                     className="w-full justify-start"
-                    onClick={onManageGuests}
-                    data-testid="button-manage-guests"
+                    onClick={onManageHostTeam}
+                    data-testid="button-manage-host-team"
                   >
-                    <Check className="w-4 h-4 mr-2" />
-                    Manage Guest List
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    className="w-full justify-start"
-                    onClick={onManagePotluck}
-                    data-testid="button-manage-potluck"
-                  >
-                    <UtensilsCrossed className="w-4 h-4 mr-2" />
-                    Manage Potluck Board
+                    <Users className="w-4 h-4 mr-2" />
+                    Manage Host Team
                   </Button>
                   <Button
                     variant="secondary"
@@ -183,6 +176,15 @@ export default function EventDetailsPotluck({
           <TabsContent value="guests" className="mt-6">
             {/* Same guest list content - will be reused */}
             <div className="space-y-6">
+              <Button
+                variant="default"
+                className="w-full mb-4"
+                onClick={onManageGuests}
+                data-testid="button-manage-guests"
+              >
+                <ClipboardList className="w-4 h-4 mr-2" />
+                Manage Guest List
+              </Button>
               <Button
                 variant="secondary"
                 className="w-full"

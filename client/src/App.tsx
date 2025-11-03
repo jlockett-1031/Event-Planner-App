@@ -83,6 +83,7 @@ function Router() {
             onHostActivity={() => setCurrentView("host-activity")}
             onPhotoAlbum={() => setCurrentView("photo-album")}
             onLocationDetails={() => setCurrentView("location-details")}
+            onManageHostTeam={() => setCurrentView("manage-host-team")}
           />
         )}
         {currentView === "host-activity" && (
