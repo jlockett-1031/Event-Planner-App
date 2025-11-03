@@ -8,10 +8,11 @@ import Dashboard from "@/pages/Dashboard";
 import EventForm from "@/components/EventForm";
 import EventDetailsHost from "@/pages/EventDetailsHost";
 import HostActivityFeed from "@/pages/HostActivityFeed";
+import GuestList from "@/pages/GuestList";
 import NotFound from "@/pages/not-found";
 
 function Router() {
-  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "host-activity">("dashboard");
+  const [currentView, setCurrentView] = useState<"dashboard" | "create" | "details" | "host-activity" | "guest-list">("dashboard");
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   return (
@@ -45,7 +46,7 @@ function Router() {
         {currentView === "details" && (
           <EventDetailsHost
             onBack={() => setCurrentView("dashboard")}
-            onManageGuests={() => console.log("Manage Guests")}
+            onManageGuests={() => setCurrentView("guest-list")}
             onManagePotluck={() => console.log("Manage Potluck")}
             onDrinkCalculator={() => console.log("Drink Calculator")}
             onGiftRegistry={() => console.log("Gift Registry")}
@@ -55,6 +56,9 @@ function Router() {
         )}
         {currentView === "host-activity" && (
           <HostActivityFeed onBack={() => setCurrentView("details")} />
+        )}
+        {currentView === "guest-list" && (
+          <GuestList onBack={() => setCurrentView("details")} />
         )}
       </Route>
       <Route component={NotFound} />

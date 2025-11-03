@@ -127,15 +127,6 @@ export default function EventDetailsHost({
                 <Button
                   variant="secondary"
                   className="w-full justify-start"
-                  onClick={onManageGuests}
-                  data-testid="button-manage-guests"
-                >
-                  <Users className="w-4 h-4 mr-2" />
-                  Manage Guest List (50)
-                </Button>
-                <Button
-                  variant="secondary"
-                  className="w-full justify-start"
                   data-testid="button-manage-menu"
                 >
                   <UtensilsCrossed className="w-4 h-4 mr-2" />
@@ -193,11 +184,19 @@ export default function EventDetailsHost({
           </TabsContent>
 
           <TabsContent value="guests" className="mt-6">
-            <div className="bg-card rounded-xl p-6 text-center">
-              <p className="text-muted-foreground">Guest list management view</p>
-              <Button className="mt-4" onClick={onManageGuests}>
-                Go to Guest List
+            <div className="space-y-4">
+              <Button
+                variant="secondary"
+                className="w-full justify-start"
+                onClick={onManageGuests}
+                data-testid="button-manage-guests"
+              >
+                <Users className="w-4 h-4 mr-2" />
+                Manage Guest List (50)
               </Button>
+              <div className="bg-card rounded-xl p-6 text-center">
+                <p className="text-muted-foreground">Click above to view and manage your guest list</p>
+              </div>
             </div>
           </TabsContent>
 
