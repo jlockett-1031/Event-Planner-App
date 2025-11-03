@@ -34,6 +34,7 @@ const mockAttendingEvents: Event[] = [
     time: "9:00 PM",
     location: "Downtown Event Center",
     role: "attending",
+    hasTimeConflict: true,
   },
   {
     id: "4",
@@ -42,6 +43,15 @@ const mockAttendingEvents: Event[] = [
     time: "3:00 PM",
     location: "Central Park Pavilion",
     role: "attending",
+  },
+  {
+    id: "6",
+    name: "New Year's Countdown Party",
+    date: "December 31, 2025",
+    time: "8:00 PM",
+    location: "Rooftop Lounge",
+    role: "attending",
+    hasTimeConflict: true,
   },
 ];
 

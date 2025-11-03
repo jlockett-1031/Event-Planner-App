@@ -32,8 +32,8 @@ function Router() {
             onCreateEvent={() => setCurrentView("create")}
             onEventClick={(eventId) => {
               setSelectedEventId(eventId);
-              // Route to guest view for attending events (IDs "3" and "4")
-              if (eventId === "3" || eventId === "4") {
+              // Route to guest view for attending events (IDs "3", "4", and "6")
+              if (eventId === "3" || eventId === "4" || eventId === "6") {
                 setCurrentView("details-guest");
               }
               // Route to potluck page for Holiday Potluck event (ID "2")

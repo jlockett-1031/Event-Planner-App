@@ -172,6 +172,7 @@ export default function EventDetailsGuest({ eventId, onBack }: EventDetailsGuest
 
   // Mock data based on eventId
   const isNewYearsEve = eventId === "3";
+  const isCountdownParty = eventId === "6";
   
   const eventData = isNewYearsEve ? {
     name: "New Year's Eve Bash",
@@ -181,6 +182,14 @@ export default function EventDetailsGuest({ eventId, onBack }: EventDetailsGuest
     address: "456 Party Avenue, Suite 100",
     type: "Potluck",
     hostName: "Alex Johnson"
+  } : isCountdownParty ? {
+    name: "New Year's Countdown Party",
+    date: "December 31, 2025",
+    time: "8:00 PM",
+    location: "Rooftop Lounge",
+    address: "789 Sky Plaza, 20th Floor",
+    type: "Hosted Meal",
+    hostName: "Sarah Martinez"
   } : {
     name: "Mike's Birthday Party",
     date: "January 5, 2026",
