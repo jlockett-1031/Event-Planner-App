@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, Users, UtensilsCrossed, Wine, Gift, Music, Camera, MapPin } from "lucide-react";
+import { ArrowLeft, Users, UtensilsCrossed, Wine, Gift, Music, Camera, MapPin, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -184,18 +184,109 @@ export default function EventDetailsHost({
           </TabsContent>
 
           <TabsContent value="guests" className="mt-6">
-            <div className="space-y-4">
+            <div className="space-y-6">
+              {/* Import Button */}
               <Button
                 variant="secondary"
-                className="w-full justify-start"
-                onClick={onManageGuests}
-                data-testid="button-manage-guests"
+                className="w-full"
+                data-testid="button-import-contacts"
               >
-                <Users className="w-4 h-4 mr-2" />
-                Manage Guest List (50)
+                + Import from Contacts
               </Button>
-              <div className="bg-card rounded-xl p-6 text-center">
-                <p className="text-muted-foreground">Click above to view and manage your guest list</p>
+
+              {/* Search */}
+              <input
+                type="text"
+                placeholder="Search guests..."
+                className="w-full px-4 py-3 rounded-lg border border-input bg-background"
+                data-testid="input-search-guests"
+              />
+
+              {/* Attending Section */}
+              <div>
+                <h3 className="text-xl font-bold mb-4">Attending (35)</h3>
+                <div className="space-y-3">
+                  <div className="bg-card rounded-lg p-4 border border-card-border">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-base">Jake Thompson</span>
+                          <span className="text-emerald-600 flex items-center gap-1">
+                            <Check className="w-4 h-4" />
+                            <span className="text-sm">Yes</span>
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">+1 guest</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-card rounded-lg p-4 border border-card-border">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-base">Emily Chen</span>
+                          <span className="text-emerald-600 flex items-center gap-1">
+                            <Check className="w-4 h-4" />
+                            <span className="text-sm">Yes</span>
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">No additional guests</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-card rounded-lg p-4 border border-card-border">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-base">Michael Rodriguez</span>
+                          <span className="text-emerald-600 flex items-center gap-1">
+                            <Check className="w-4 h-4" />
+                            <span className="text-sm">Yes</span>
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">Bringing chips & salsa</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Maybe Section */}
+              <div>
+                <h3 className="text-xl font-bold mb-4">Maybe (5)</h3>
+                <div className="space-y-3">
+                  <div className="bg-card rounded-lg p-4 border border-card-border">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-base">Alex Kim</span>
+                          <span className="text-amber-600 flex items-center gap-1">
+                            <span className="text-sm">? Maybe</span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Not Yet Responded Section */}
+              <div>
+                <h3 className="text-xl font-bold mb-4">Not Yet Responded (10)</h3>
+                <div className="space-y-3">
+                  <div className="bg-card rounded-lg p-4 border border-card-border">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-base">Jordan Lee</span>
+                          <span className="text-muted-foreground text-sm">Pending</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </TabsContent>
