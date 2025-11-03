@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { ArrowLeft, Users, UtensilsCrossed, Wine, Gift, Music, Camera, MapPin, Check } from "lucide-react";
+import { ArrowLeft, UtensilsCrossed, Wine, Gift, Music, Camera, MapPin, Check, ChevronDown, ChevronUp, Info, ClipboardList, Megaphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface EventDetailsHostProps {
   onBack?: () => void;
@@ -93,7 +94,8 @@ export default function EventDetailsHost({
                   <div>
                     <div className="font-semibold">You</div>
                     <Badge className="mt-1 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/30">
-                      📣 Comm Lead
+                      <Megaphone className="w-3 h-3 mr-1" />
+                      Comm Lead
                     </Badge>
                   </div>
                 </div>
@@ -292,11 +294,91 @@ export default function EventDetailsHost({
           </TabsContent>
 
           <TabsContent value="potluck" className="mt-6">
-            <div className="bg-card rounded-xl p-6 text-center">
-              <p className="text-muted-foreground">Potluck management view</p>
-              <Button className="mt-4" onClick={onManagePotluck}>
-                Go to Potluck Management
-              </Button>
+            <div className="space-y-6">
+              {/* Info Note */}
+              <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4 flex gap-3">
+                <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-blue-900 dark:text-blue-100">
+                  This is a host-provided menu. Guests will view the menu and can note dietary restrictions.
+                </p>
+              </div>
+
+              {/* Appetizers */}
+              <MenuSection title="Appetizers">
+                <MenuItem name="Shrimp Cocktail" provider="Host Provided" />
+                <MenuItem name="Cheese & Crackers Platter" provider="Host Provided" />
+              </MenuSection>
+
+              {/* Main Dishes */}
+              <MenuSection title="Main Dishes">
+                <MenuItem name="BBQ Ribs" provider="Host Provided" />
+                <MenuItem name="Grilled Chicken" provider="Host Provided" />
+                <MenuItem name="Vegetarian Pasta" provider="Host Provided - Vegetarian" />
+              </MenuSection>
+
+              {/* Sides */}
+              <MenuSection title="Sides">
+                <MenuItem name="Coleslaw" provider="Host Provided" />
+                <MenuItem name="Corn on the Cob" provider="Host Provided" />
+              </MenuSection>
+
+              {/* Desserts */}
+              <MenuSection title="Desserts">
+                <MenuItem name="Graduation Cake" provider="Host Provided" />
+                <MenuItem name="Cookies" provider="Host Provided" />
+              </MenuSection>
+
+              {/* Drinks */}
+              <MenuSection title="Drinks">
+                <div className="space-y-3">
+                  {/* Drink Calculator Button */}
+                  <div className="bg-card rounded-lg p-4 border border-card-border">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex-1">
+                        <div className="font-semibold text-base mb-1">Use Drink Calculator</div>
+                        <p className="text-sm text-muted-foreground">
+                          Get personalized drink recommendations based on your guest count
+                        </p>
+                      </div>
+                    </div>
+                    <Button 
+                      className="w-full mt-2" 
+                      onClick={onDrinkCalculator}
+                      data-testid="button-calculate-drinks"
+                    >
+                      Calculate
+                    </Button>
+                  </div>
+
+                  <MenuItem name="Beer (3 cases, 24-pack)" provider="" />
+                  <MenuItem name="Wine (6 bottles: 4 white, 2 red)" provider="" />
+                  <MenuItem name="Soft Drinks (10 bottles, 2-liter)" provider="Host Provided - From Drink Calculator" />
+                  <MenuItem name="Water (3 cases, 24-pack)" provider="" />
+                  <MenuItem name="Ice (4 bags, 20 lb each)" provider="" />
+                </div>
+              </MenuSection>
+
+              {/* Guest Dietary Restrictions */}
+              <MenuSection title="Guest Dietary Restrictions (5)">
+                <div className="space-y-2">
+                  <DietaryRestriction name="Emily Chen" restriction="Vegetarian" color="green" />
+                  <DietaryRestriction name="Michael Rodriguez" restriction="Gluten-free" color="yellow" />
+                  <DietaryRestriction name="Sarah Martinez" restriction="Nut allergy" color="yellow" />
+                  <DietaryRestriction name="Alex Kim" restriction="Lactose intolerant" color="yellow" />
+                  <DietaryRestriction name="Jordan Lee" restriction="Vegan" color="green" />
+                </div>
+              </MenuSection>
+
+              {/* Action Buttons */}
+              <div className="space-y-3 pt-4">
+                <Button variant="secondary" className="w-full" data-testid="button-add-menu-item">
+                  + Add Menu Item
+                </Button>
+                <Button variant="secondary" className="w-full" data-testid="button-generate-shopping-list">
+                  <ClipboardList className="w-4 h-4 mr-2" />
+                  Generate Shopping List
+                </Button>
+              </div>
             </div>
           </TabsContent>
 
@@ -307,6 +389,63 @@ export default function EventDetailsHost({
           </TabsContent>
         </Tabs>
       </div>
+    </div>
+  );
+}
+
+// Helper component for collapsible menu sections
+function MenuSection({ title, children }: { title: string; children: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <CollapsibleTrigger asChild>
+        <button
+          className="w-full flex items-center justify-between p-4 bg-card rounded-lg border border-card-border hover-elevate"
+          data-testid={`section-${title.toLowerCase().replace(/\s/g, '-')}`}
+        >
+          <span className="font-semibold text-lg">{title}</span>
+          {isOpen ? (
+            <ChevronUp className="w-5 h-5 text-muted-foreground" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-muted-foreground" />
+          )}
+        </button>
+      </CollapsibleTrigger>
+      <CollapsibleContent className="mt-3">
+        <div className="space-y-3">{children}</div>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+}
+
+// Helper component for menu items
+function MenuItem({ name, provider }: { name: string; provider: string }) {
+  return (
+    <div className="bg-card rounded-lg p-4 border border-card-border">
+      <div className="font-semibold text-base">{name}</div>
+      {provider && <p className="text-sm text-muted-foreground mt-1">{provider}</p>}
+    </div>
+  );
+}
+
+// Helper component for dietary restrictions
+function DietaryRestriction({ 
+  name, 
+  restriction, 
+  color 
+}: { 
+  name: string; 
+  restriction: string; 
+  color: "green" | "yellow" 
+}) {
+  const bgColor = color === "green" 
+    ? "bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800" 
+    : "bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800";
+  
+  return (
+    <div className={`rounded-lg p-4 border ${bgColor}`}>
+      <div className="font-semibold text-base">{name}: {restriction}</div>
     </div>
   );
 }
