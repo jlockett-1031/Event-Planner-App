@@ -1,9 +1,14 @@
-import { useState } from "react";
-import { ArrowLeft, UtensilsCrossed, Wine, Gift, Music, Camera, MapPin, Check, ChevronDown, ChevronUp, Info, ClipboardList, Megaphone, Users, Settings, MessageSquare, CalendarX, BarChart, Sparkles, ChevronRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ArrowLeft, UtensilsCrossed, Wine, Gift, Music, Camera, MapPin, Check, ChevronDown, ChevronUp, Info, ClipboardList, Megaphone, Users, Settings, MessageSquare, CalendarX, BarChart, Sparkles, ChevronRight, Pencil, X, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 
 interface EventDetailsPotluckProps {
   onBack?: () => void;
@@ -41,6 +46,82 @@ export default function EventDetailsPotluck({
   onAdvancedFeatures,
 }: EventDetailsPotluckProps) {
   const [activeTab, setActiveTab] = useState("overview");
+  const { toast } = useToast();
+
+  // Appetizer data with unique IDs
+  interface AppetizerItem {
+    id: string;
+    name: string;
+    claimedBy: string;
+  }
+
+  const [appetizers, setAppetizers] = useState<AppetizerItem[]>([
+    { id: "app-1", name: "Chips & Salsa", claimedBy: "Unclaimed" },
+    { id: "app-2", name: "Veggie Platter", claimedBy: "Unclaimed" },
+    { id: "app-3", name: "Cheese & Crackers", claimedBy: "Unclaimed" },
+    { id: "app-4", name: "Spinach Dip", claimedBy: "Unclaimed" },
+  ]);
+
+  // Editing state - only track which item is being edited
+  const [editingAppetizerId, setEditingAppetizerId] = useState<string | null>(null);
+
+  // Track which potluck sections are open to persist state across re-renders
+  // Initialize with Appetizers open by default
+  const [openSections, setOpenSections] = useState<Set<string>>(new Set(["Appetizers"]));
+
+  const toggleSection = (sectionName: string) => {
+    setOpenSections(prev => {
+      const next = new Set(prev);
+      if (next.has(sectionName)) {
+        next.delete(sectionName);
+      } else {
+        next.add(sectionName);
+      }
+      return next;
+    });
+  };
+
+  // Mock guests for claimed-by selector
+  const guestOptions = [
+    "Unclaimed",
+    "Emily Chen",
+    "Michael Rodriguez",
+    "Sarah Martinez",
+    "Alex Johnson",
+    "Jordan Taylor",
+  ];
+
+  const handleStartEdit = (appetizerId: string) => {
+    setEditingAppetizerId(appetizerId);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingAppetizerId(null);
+  };
+
+  const handleSaveEdit = (appetizerId: string, name: string, claimedBy: string) => {
+    if (!name.trim()) {
+      toast({
+        title: "Validation Error",
+        description: "Appetizer name is required",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setAppetizers(appetizers.map(app =>
+      app.id === appetizerId
+        ? { ...app, name: name.trim(), claimedBy: claimedBy }
+        : app
+    ));
+
+    toast({
+      title: "Success",
+      description: "Appetizer updated successfully",
+    });
+
+    setEditingAppetizerId(null);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -333,16 +414,32 @@ export default function EventDetailsPotluck({
                 </p>
               </div>
 
-              {/* Appetizers */}
-              <PotluckSection title="Appetizers">
-                <PotluckItem name="Chips & Salsa" claimedBy="Unclaimed" />
-                <PotluckItem name="Veggie Platter" claimedBy="Unclaimed" />
-                <PotluckItem name="Cheese & Crackers" claimedBy="Unclaimed" />
-                <PotluckItem name="Spinach Dip" claimedBy="Unclaimed" />
+              {/* Appetizers - Editable */}
+              <PotluckSection 
+                title="Appetizers"
+                isOpen={openSections.has("Appetizers")}
+                onToggle={() => toggleSection("Appetizers")}
+              >
+                {appetizers.map((appetizer) => (
+                  <EditableAppetizerItem
+                    key={appetizer.id}
+                    appetizer={appetizer}
+                    isEditing={editingAppetizerId === appetizer.id}
+                    guestOptions={guestOptions}
+                    onStartEdit={handleStartEdit}
+                    onCancelEdit={handleCancelEdit}
+                    onSaveEdit={handleSaveEdit}
+                    isAnyEditing={editingAppetizerId !== null}
+                  />
+                ))}
               </PotluckSection>
 
               {/* Main Dishes */}
-              <PotluckSection title="Main Dishes">
+              <PotluckSection 
+                title="Main Dishes"
+                isOpen={openSections.has("Main Dishes")}
+                onToggle={() => toggleSection("Main Dishes")}
+              >
                 <PotluckItem name="Honey Glazed Ham" claimedBy="Unclaimed" />
                 <PotluckItem name="Mac & Cheese" claimedBy="Unclaimed" />
                 <PotluckItem name="Pasta Salad" claimedBy="Unclaimed" />
@@ -350,21 +447,33 @@ export default function EventDetailsPotluck({
               </PotluckSection>
 
               {/* Sides */}
-              <PotluckSection title="Sides">
+              <PotluckSection 
+                title="Sides"
+                isOpen={openSections.has("Sides")}
+                onToggle={() => toggleSection("Sides")}
+              >
                 <PotluckItem name="Mashed Potatoes" claimedBy="Unclaimed" />
                 <PotluckItem name="Dinner Rolls" claimedBy="Unclaimed" />
                 <PotluckItem name="Cranberry Sauce" claimedBy="Unclaimed" />
               </PotluckSection>
 
               {/* Desserts */}
-              <PotluckSection title="Desserts">
+              <PotluckSection 
+                title="Desserts"
+                isOpen={openSections.has("Desserts")}
+                onToggle={() => toggleSection("Desserts")}
+              >
                 <PotluckItem name="Pumpkin Pie" claimedBy="Unclaimed" />
                 <PotluckItem name="Chocolate Cake" claimedBy="Unclaimed" />
                 <PotluckItem name="Cookies" claimedBy="Nobody - I do for them" />
               </PotluckSection>
 
               {/* Drinks */}
-              <PotluckSection title="Drinks">
+              <PotluckSection 
+                title="Drinks"
+                isOpen={openSections.has("Drinks")}
+                onToggle={() => toggleSection("Drinks")}
+              >
                 <div className="space-y-3">
                   {/* Drink Calculator Button */}
                   <div className="bg-card rounded-lg p-4 border border-card-border">
@@ -395,7 +504,11 @@ export default function EventDetailsPotluck({
               </PotluckSection>
 
               {/* Last Minute Needs */}
-              <PotluckSection title="Last Minute Needs">
+              <PotluckSection 
+                title="Last Minute Needs"
+                isOpen={openSections.has("Last Minute Needs")}
+                onToggle={() => toggleSection("Last Minute Needs")}
+              >
                 <PotluckItem name="Ice" claimedBy="Unclaimed - but its need" />
                 <PotluckItem name="Paper Plates" claimedBy="Unclaimed" />
               </PotluckSection>
@@ -499,12 +612,20 @@ export default function EventDetailsPotluck({
   );
 }
 
-// Helper component for collapsible potluck sections
-function PotluckSection({ title, children }: { title: string; children: React.ReactNode }) {
-  const [isOpen, setIsOpen] = useState(false);
-
+// Helper component for collapsible potluck sections with controlled state
+function PotluckSection({ 
+  title, 
+  children, 
+  isOpen, 
+  onToggle 
+}: { 
+  title: string; 
+  children: React.ReactNode;
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
   return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+    <Collapsible open={isOpen} onOpenChange={onToggle}>
       <CollapsibleTrigger asChild>
         <button
           className="w-full flex items-center justify-between p-4 bg-primary/10 dark:bg-primary/20 rounded-lg border border-primary/20 hover-elevate"
@@ -547,6 +668,142 @@ function PotluckItem({ name, claimedBy }: { name: string; claimedBy: string }) {
             Claim
           </Button>
         )}
+      </div>
+    </div>
+  );
+}
+
+// Editable appetizer item component with local state
+interface EditableAppetizerItemProps {
+  appetizer: { id: string; name: string; claimedBy: string };
+  isEditing: boolean;
+  guestOptions: string[];
+  onStartEdit: (appetizerId: string) => void;
+  onCancelEdit: () => void;
+  onSaveEdit: (appetizerId: string, name: string, claimedBy: string) => void;
+  isAnyEditing: boolean;
+}
+
+function EditableAppetizerItem({
+  appetizer,
+  isEditing,
+  guestOptions,
+  onStartEdit,
+  onCancelEdit,
+  onSaveEdit,
+  isAnyEditing,
+}: EditableAppetizerItemProps) {
+  // Local edit state - initializes from props when entering edit mode
+  const [editName, setEditName] = useState(appetizer.name);
+  const [editClaimedBy, setEditClaimedBy] = useState(appetizer.claimedBy);
+
+  // Sync local state when entering edit mode or when appetizer changes
+  useEffect(() => {
+    if (isEditing) {
+      setEditName(appetizer.name);
+      setEditClaimedBy(appetizer.claimedBy);
+    }
+  }, [isEditing, appetizer.name, appetizer.claimedBy]);
+
+  const isUnclaimed = appetizer.claimedBy.includes("Unclaimed");
+
+  const handleSave = () => {
+    onSaveEdit(appetizer.id, editName, editClaimedBy);
+  };
+
+  const handleCancel = () => {
+    // Reset to current appetizer values
+    setEditName(appetizer.name);
+    setEditClaimedBy(appetizer.claimedBy);
+    onCancelEdit();
+  };
+
+  // If this item is in edit mode, show the edit form
+  if (isEditing) {
+    return (
+      <Card className="border-2 border-primary/30">
+        <CardHeader className="bg-gradient-to-r from-primary/10 to-primary/5 py-3">
+          <div className="flex items-center gap-2">
+            <Pencil className="w-4 h-4 text-primary" />
+            <span className="text-sm font-semibold text-primary">Editing Appetizer</span>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-4 space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor={`appetizer-name-${appetizer.id}`}>Appetizer Name *</Label>
+            <Input
+              id={`appetizer-name-${appetizer.id}`}
+              value={editName}
+              onChange={(e) => setEditName(e.target.value)}
+              placeholder="Enter appetizer name"
+              data-testid="input-edit-appetizer-name"
+              autoFocus
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor={`claimed-by-${appetizer.id}`}>Claimed By</Label>
+            <Select
+              value={editClaimedBy}
+              onValueChange={setEditClaimedBy}
+            >
+              <SelectTrigger id={`claimed-by-${appetizer.id}`} data-testid="select-edit-claimed-by">
+                <SelectValue placeholder="Select who's bringing this" />
+              </SelectTrigger>
+              <SelectContent>
+                {guestOptions.map((guest) => (
+                  <SelectItem key={guest} value={guest}>
+                    {guest}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex gap-2 pt-2">
+            <Button
+              onClick={handleSave}
+              className="flex-1"
+              data-testid="button-save-appetizer"
+            >
+              <Save className="w-4 h-4 mr-2" />
+              Save
+            </Button>
+            <Button
+              onClick={handleCancel}
+              variant="outline"
+              className="flex-1"
+              data-testid="button-cancel-edit-appetizer"
+            >
+              <X className="w-4 h-4 mr-2" />
+              Cancel
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Otherwise, show the read-only view
+  return (
+    <div className="bg-card rounded-lg p-4 border border-card-border">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex-1">
+          <div className="font-semibold text-base">{appetizer.name}</div>
+          <p className={`text-sm mt-1 ${isUnclaimed ? 'text-muted-foreground' : 'text-primary'}`}>
+            {appetizer.claimedBy}
+          </p>
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => onStartEdit(appetizer.id)}
+          disabled={isAnyEditing}
+          data-testid={`button-edit-${appetizer.id}`}
+          className="flex-shrink-0"
+        >
+          <Pencil className="w-4 h-4" />
+        </Button>
       </div>
     </div>
   );
